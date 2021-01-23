@@ -3,11 +3,12 @@ import '../components/KanbanBoard.css';
 import '../components/Task.css'
 import studybuddy from '../assets/name-w-blobs.png';
 import Popup from 'reactjs-popup';
+import Timer from '../components/Timer'
 import React, { useState } from 'react';
 import Draggable from 'react-draggable';
 import 'reactjs-popup/dist/index.css';
 
-function Kanban() {
+function Kanban({time}) {
 
     //task arrays
     const [toDoTasks, setToDo] = useState([]);
@@ -123,7 +124,8 @@ function Kanban() {
                     </div>
                 </Popup>
             <div className="container">
-                <img id="logo" src={studybuddy}></img>
+                <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
+                <Timer font='Alata' fontColor='#9DA7FF' hours={time} minutes={0} seconds={0} postText="hours left"/>
             </div>
             <div id="kanban-btns">
                 <button className="btn">view camera</button>

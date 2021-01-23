@@ -10,7 +10,8 @@
 
 .container {
     width: 100%;
-    text-align: left;
+    display: flex;
+    justify-content: space-between;
 }
 
 #kanban-btns {
