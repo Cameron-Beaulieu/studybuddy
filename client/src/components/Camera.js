@@ -1,4 +1,5 @@
 import React from 'react';
+import UserContext from '../userContext';
 import './Camera.css';
 
 import * as processPose from '../scripts/faceDetection';
@@ -32,6 +33,8 @@ class Camera extends React.Component {
         this.face = undefined;
         this.facedata = undefined;
     }
+
+    static contextType = UserContext;
 
     componentDidMount() {
         navigator.mediaDevices.getUserMedia({ video: { width: 600, height: 600 }})
@@ -118,7 +121,11 @@ class Camera extends React.Component {
             if (!this.calibrated) {
                 this.findMaxFace(data)
             } else {
-                processPose.checkFace(data, this.xMaxRightEye,this.yMaxRightEye,this.xMinRightEye,this.yMinRightEye,this.xMaxLeftEye,this.yMaxLeftEye,this.xMinLeftEye,this.yMinLeftEye)
+                if (processPose.checkFace(data, this.xMaxRightEye,this.yMaxRightEye,this.xMinRightEye,this.yMinRightEye,this.xMaxLeftEye,this.yMaxLeftEye,this.xMinLeftEye,this.yMinLeftEye)) {
+                    this.context.setSlack(this.context.slack + 0.5);
+                } else {
+                    this.context.setProductivity(this.context.productivity + 0.5);
+                }
             }
         })
     }
@@ -131,7 +138,11 @@ class Camera extends React.Component {
             if (!this.calibrated) {
                 this.findMaxPose(pose)
             } else {
-                processPose.checkShoulders(pose, this.xMaxRightShoulder,this.yMaxRightShoulder,this.xMinRightShoulder,this.yMinRightShoulder,this.xMaxLeftShoulder,this.yMaxLeftShoulder,this.xMinLeftShoulder,this.yMinLeftShoulder)
+                if (processPose.checkShoulders(pose, this.xMaxRightShoulder,this.yMaxRightShoulder,this.xMinRightShoulder,this.yMinRightShoulder,this.xMaxLeftShoulder,this.yMaxLeftShoulder,this.xMinLeftShoulder,this.yMinLeftShoulder)) {
+                    this.context.setBadPostureTime(this.context.badPostureTime + 0.5);
+                } else {
+                    this.context.setGoodPostureTime(this.context.goodPostureTime + 0.5);
+                }
             }
         })
     }
