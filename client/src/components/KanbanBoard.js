@@ -1,6 +1,7 @@
 import './KanbanBoard.css';
 import Task from './Task';
 
+
 function KanbanBoard({name, tasks}){
 
     function getTasks(tasks){
