@@ -1,5 +1,5 @@
 #screen {   
-    background: linear-gradient(180deg, #AAFAFF 0%, #FFFFFF 100%);
+   background: linear-gradient(180deg, #AAFAFF 0%, #FFFFFF 100%);
     background-attachment: fixed;
     width: 100%;
     height: 100%;
@@ -11,55 +11,56 @@
 }
 
 #innerSection{
-    width: 90%;
-    height: 800px;
+    margin: 1rem;
+    padding: 2rem;
     background: #9DA7FF;
-    border-radius: 20px;
+    border-radius: 2rem;
     text-align: center;
-    margin-bottom: 5%;
-}
-
-
-#title{
-    padding-left: 5%;
-    font-family: "Alata";
-    font-style: normal;
-    font-weight: normal;
-    font-size: 36px;
-    line-height: 50px;
-
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    text-align: center;
-
-    color: #FFFFFF;
+    color: white;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-#pieChart{
+#sessionTitle{
+    font-family: "Alata";
+    text-align: start;
+    align-self: flex-start;
+}
+
+#pieChart {
     width: 30%;
     height: auto;
-    margin-left: 35%;
 }
 
-.stat{
-    font-family: "Alata";
-    font-style: normal;
-    font-weight: normal;
-    font-size: 36px;
-    line-height: 50px;
-    color: #FFFFFF;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+#stats {
+    padding: 0 10rem;
 }
 
+.stats-btn {
+    background-color: #00A9B4;
+    height: fit-content;
+    font-family: 'Alata';
+    border-radius: 1rem;
+    border-style: none;
+    transition: 1s;
+}
 
+.stats-btn:hover {
+    background-color: white;
+    color: #00A9B4;
+    transition: 1s;
+}
 
-#chartInfo{
-    font-family: "Alata";
-    font-style: normal;
-    font-weight: normal;
-    font-size: 36px;
-    line-height: 50px;
-    color: #FFFFFF;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+#newSession {
+    margin-right: 1rem;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
