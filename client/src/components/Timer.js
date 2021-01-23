@@ -9,10 +9,16 @@ export default class Timer extends Component {
             seconds: this.props.seconds,
             preText: this.props.preText, //text for before the timer
             postText: this.props.postText, //text for after the timer
+            style: {
+                font: this.props.font,
+                fontColor: this.props.fontColor
+            }
         }
+        console.log(this.state.style);
     }
 
     componentDidMount() {
+        console.log('mounting timer');
         this.myInterval = setInterval(() => {
             const { hours, seconds, minutes } = this.state
 
@@ -44,16 +50,18 @@ export default class Timer extends Component {
     }
 
     componentWillUnmount() {
+        console.log('unmounting timer');
         clearInterval(this.myInterval)
     }
 
     render() {
-        const {postText, preText, hours, minutes, seconds } = this.state
+        const {postText, preText, hours, minutes, seconds, style } = this.state;
+
         return (
             <div>
                 { hours === 0 && minutes === 0 && seconds === 0
                     ? <h1>Time Up</h1> //adjust this to what you want to happen when the timer is up
-                    : <h1>{preText} {hours}:{minutes < 10 ? `0${minutes}` : minutes}:{seconds < 10 ? `0${seconds}` : seconds} {postText}</h1>
+                    : <h1 style={{fontFamily: style.font, color: style.fontColor, letterSpacing: 0}}>{preText} {hours}:{minutes < 10 ? `0${minutes}` : minutes}:{seconds < 10 ? `0${seconds}` : seconds} {postText}</h1>
                 }
             </div>
         )
