@@ -7,8 +7,9 @@ import Timer from '../components/Timer'
 import React, { useState } from 'react';
 import Draggable from 'react-draggable';
 import 'reactjs-popup/dist/index.css';
+import will from '../assets/will.png';
 
-function Kanban({time}) {
+function Kanban({ time }) {
 
     //task arrays
     const [toDoTasks, setToDo] = useState([]);
@@ -18,11 +19,11 @@ function Kanban({time}) {
     class Task extends React.Component {
 
         bounds = { // need to fix bounds
-            toDo: window.innerWidth / 3 -100,
-            inProgress: (window.innerWidth / 3) * 2 -100,
+            toDo: window.innerWidth / 3 - 100,
+            inProgress: (window.innerWidth / 3) * 2 - 100,
             done: window.innerWidth
         }
-    
+
         constructor(props) {
             super(props);
             this.name = props.name;
@@ -40,7 +41,7 @@ function Kanban({time}) {
         }
 
         removeFromList() {
-            switch(this.state.status){
+            switch (this.state.status) {
                 case 'to-do': setToDo(toDoTasks.filter(task => task !== this.name)); break;
                 case 'in-progress': setProgress(progressTasks.filter(task => task !== this.name)); break;
                 case 'done': setDone(doneTasks.filter(task => task !== this.name)); break;
@@ -49,41 +50,41 @@ function Kanban({time}) {
             console.log('in progress: ' + progressTasks);
             console.log('done: ' + doneTasks);*/
         }
-    
+
         handleStop = (e, ui) => {
 
             let offset = 0; // offsets bc ui.x is based on position relative to start position
-            if (this.state.status === 'in-progress'){
+            if (this.state.status === 'in-progress') {
                 offset = this.bounds.toDo;
-            }else if (this.state.status === 'done'){
+            } else if (this.state.status === 'done') {
                 offset = this.bounds.inProgress;
             }
 
             let newX = ui.x + offset; // new x position
             this.removeFromList(); // remove from old board
             // add to new board based on x position
-            if (newX < this.bounds.toDo){
+            if (newX < this.bounds.toDo) {
                 setToDo(toDoTasks.concat(this.name));
                 this.setState({
                     status: 'to-do'
                 });
-            }else if (newX < this.bounds.inProgress){
+            } else if (newX < this.bounds.inProgress) {
                 setProgress(progressTasks.concat(this.name));
                 this.setState({
                     status: 'in-progress'
                 });
-            }else {
+            } else {
                 setDone(doneTasks.concat(this.name));
                 this.setState({
                     status: 'done'
                 });
             }
         }
-    
+
         render() {
             return (
                 <Draggable onStop={this.handleStop}>
-                    <div id={`task-${this.props.name}`}  className={`task ${this.state.status}`}>{this.props.name}</div>
+                    <div id={`task-${this.props.name}`} className={`task ${this.state.status}`}>{this.props.name}</div>
                 </Draggable>
             )
         }
@@ -102,30 +103,40 @@ function Kanban({time}) {
     }
 
     // populate boards based on task arrays
-    function getTasks(tasks, board){
+    function getTasks(tasks, board) {
         let count = 0;
         const taskElements = tasks.map((task) => {
             //console.log(task);
             count++;
-            return (<Task key={`${board}-${count}`} name={`${ task }`} status={`${board}`}/>); // name is the name of kanban board
+            return (<Task key={`${board}-${count}`} name={`${task}`} status={`${board}`} />); // name is the name of kanban board
         });
         return taskElements;
     }
 
+    //popup for adding tasks
+    const [waterPopupOpen, drinkWater] = useState(true);
+    const closeWaterPopup = () => drinkWater(false);
+
     return (
         <div className="kanban">
-            <Popup contentStyle={{background: 'none', borderStyle: 'none'}} open={open} closeOnDocumentClick onClose={closeModal}>
-                    <div className="task-popup">
-                        <span>new task:</span>
-                        <form>
+            <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={open} closeOnDocumentClick onClose={closeModal}>
+                <div className="task-popup popup-div">
+                    <span>new task:</span>
+                    <form>
                         <input id="task-input" placeholder="task name..."></input>
                         <button className="btn" onClick={() => { addTask(); setOpen(false); }}>+</button>
-                        </form>
-                    </div>
+                    </form>
+                </div>
+            </Popup>
+            <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={waterPopupOpen} closeOnDocumentClick onClose={closeWaterPopup}>
+                <div id="drink-water" className="popup-div">
+                    <img id="will" src={will}></img>
+                    <h2>here's your reminder to drink some water!</h2>
+                </div>
             </Popup>
             <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
-                <Timer font='Alata' fontColor='#9DA7FF' hours={time} minutes={0} seconds={0} postText="hours left"/>
+                <Timer font='Alata' fontColor='#9DA7FF' hours={time} minutes={0} seconds={0} postText="hours left" />
             </div>
             <div id="kanban-btns">
                 <button className="btn">view camera</button>
