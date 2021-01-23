@@ -106,25 +106,28 @@ function Kanban() {
         const taskElements = tasks.map((task) => {
             //console.log(task);
             count++;
-            return (<Task key={`${board}-${count}`} name={`${ task }`} status={`${board}`}></Task>); // name is the name of kanban board
+            return (<Task key={`${board}-${count}`} name={`${ task }`} status={`${board}`}/>); // name is the name of kanban board
         });
         return taskElements;
     }
 
     return (
         <div className="kanban">
+            <Popup contentStyle={{background: 'none', borderStyle: 'none'}} open={open} closeOnDocumentClick onClose={closeModal}>
+                    <div className="popup-div">
+                        <span>new task:</span>
+                        <form>
+                        <input id="task-input" placeholder="task name..."></input>
+                        <button className="btn" onClick={() => { addTask(); setOpen(false); }}>+</button>
+                        </form>
+                    </div>
+                </Popup>
             <div className="container">
                 <img id="logo" src={studybuddy}></img>
             </div>
             <div id="kanban-btns">
                 <button className="btn">view camera</button>
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
-                <Popup open={open} closeOnDocumentClick onClose={closeModal}>
-                    <div className="content">
-                        <input id="task-input" placeholder="task name..."></input>
-                        <button className="btn" onClick={() => { addTask(); setOpen(false); }}>add!</button>
-                    </div>
-                </Popup>
             </div>
             <div id="boards">
                 <div className="board">
