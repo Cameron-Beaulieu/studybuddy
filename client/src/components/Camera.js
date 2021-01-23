@@ -21,7 +21,8 @@ class Camera extends React.Component {
         this.drawn = false;
         this.calibrated = false;
         this.boxes = [];
-        this.calibrationPadding = 20;
+        this.eyeCalibrationPadding = 30;
+        this.shoulderCalibrationPadding = 10;
         this.canvasContext = undefined;
         this.faceCanvasContext = undefined;
         this.poseCanvasContext = undefined;
@@ -81,28 +82,28 @@ class Camera extends React.Component {
             this.calibrated = true
             let boxes = []
             boxes.push({
-                left: this.xMinLeftEye - this.calibrationPadding,
-                top: this.yMinLeftEye - this.calibrationPadding,
-                width: this.xMaxLeftEye - this.xMinLeftEye + this.calibrationPadding * 2,
-                height: this.yMaxLeftEye - this.yMinLeftEye + this.calibrationPadding * 2
+                left: this.xMinLeftEye - this.eyeCalibrationPadding,
+                top: this.yMinLeftEye - this.eyeCalibrationPadding,
+                width: this.xMaxLeftEye - this.xMinLeftEye + this.eyeCalibrationPadding * 2,
+                height: this.yMaxLeftEye - this.yMinLeftEye + this.eyeCalibrationPadding * 2
             })
             boxes.push({
-                left: this.xMinRightEye - this.calibrationPadding,
-                top: this.yMinRightEye - this.calibrationPadding,
-                width: this.xMaxRightEye - this.xMinRightEye + this.calibrationPadding * 2,
-                height: this.yMaxRightEye - this.yMinRightEye + this.calibrationPadding * 2
+                left: this.xMinRightEye - this.eyeCalibrationPadding,
+                top: this.yMinRightEye - this.eyeCalibrationPadding,
+                width: this.xMaxRightEye - this.xMinRightEye + this.eyeCalibrationPadding * 2,
+                height: this.yMaxRightEye - this.yMinRightEye + this.eyeCalibrationPadding * 2
             })
             boxes.push({
-                left: this.xMinLeftShoulder - this.calibrationPadding,
-                top: this.yMinLeftShoulder - this.calibrationPadding,
-                width: this.xMaxLeftShoulder - this.xMinLeftShoulder + this.calibrationPadding * 2,
-                height: this.yMaxLeftShoulder - this.yMinLeftShoulder + this.calibrationPadding * 2
+                left: this.xMinLeftShoulder - this.shoulderCalibrationPadding,
+                top: this.yMinLeftShoulder - this.shoulderCalibrationPadding,
+                width: this.xMaxLeftShoulder - this.xMinLeftShoulder + this.shoulderCalibrationPadding * 2,
+                height: this.yMaxLeftShoulder - this.yMinLeftShoulder + this.shoulderCalibrationPadding * 2
             })
             boxes.push({
-                left: this.xMinRightShoulder - this.calibrationPadding,
-                top: this.yMinRightShoulder - this.calibrationPadding,
-                width: this.xMaxRightShoulder - this.xMinRightShoulder + this.calibrationPadding * 2,
-                height: this.yMaxRightShoulder - this.yMinRightShoulder + this.calibrationPadding * 2
+                left: this.xMinRightShoulder - this.shoulderCalibrationPadding,
+                top: this.yMinRightShoulder - this.shoulderCalibrationPadding,
+                width: this.xMaxRightShoulder - this.xMinRightShoulder + this.shoulderCalibrationPadding * 2,
+                height: this.yMaxRightShoulder - this.yMinRightShoulder + this.shoulderCalibrationPadding * 2
             })
             console.log("Calibration complete")
             this.setState({ calibrationBoxes: boxes });
