@@ -13,6 +13,12 @@ class Camera extends React.Component {
         }
         this.divRef = React.createRef();
         this.cameraRef = React.createRef();
+        this.poseCanvasRef = React.createRef();
+        this.faceCanvasRef = React.createRef();
+        this.drawn = false;
+        this.canvasContext = undefined;
+        this.faceCanvasContext = undefined;
+        this.poseCanvasContext = undefined;
         this.model = undefined;
         this.net = undefined;
         this.pose = undefined;
@@ -38,19 +44,23 @@ class Camera extends React.Component {
             blazeface.load()
             .then(loaded => {
                 this.face = loaded;
-                setInterval(this.detectFace.bind(this), 100);
+                setInterval(this.detectFace.bind(this), 500);
             })
 
             posenet.load({
                 architecture: "MobileNetV1",
                 multiplier: 1.0,
                 outputStride: 16,
-                quantBytes: 1
+                inputResolution: {width: 600, height: 600},
+                quantBytes: 2
             })
             .then(net => {
                 this.net = net;
                 setInterval(this.detectPose.bind(this), 500)
             })
+
+            this.faceCanvasContext = this.faceCanvasRef.current.getContext('2d');
+            this.poseCanvasContext = this.poseCanvasRef.current.getContext('2d');
         })
         .catch(err => {
             console.log("Camera permissions denied");
@@ -61,6 +71,7 @@ class Camera extends React.Component {
         this.face.estimateFaces(this.cameraRef.current, false)
         .then(data => {
             this.facedata = data;
+            this.drawFace()
         })
     }
 
@@ -68,6 +79,7 @@ class Camera extends React.Component {
         this.net.estimateSinglePose(this.cameraRef.current)
         .then(pose => {
             this.pose = pose
+            this.drawSkeleton()
         })
     }
 
@@ -86,16 +98,56 @@ class Camera extends React.Component {
 
     detectSip() {
         this.state.detectedObjects.forEach(obj => {
-            if ((obj.class === "donut") || (obj.class === "wine glass") || (obj.class === "bottle") || (obj.class === "cup")) {
-                console.log("cup detected");
-                let y = this.facedata[0].landmarks[3][1]
-                let x = this.facedata[0].landmarks[3][0]
-                if ((obj.bbox[0] - 50 < x) && (x < obj.bbox[0] + obj.bbox[2] + 50) && (obj.bbox[1] - 50 < y) && (y < obj.bbox[1] + obj.bbox[3] + 50)) {
-                    console.log("sip");
-                    return
+            if (this.facedata !== undefined) {
+                if ((obj.class === "donut") || (obj.class === "wine glass") || (obj.class === "bottle") || (obj.class === "cup")) {
+                    let y = this.facedata[0].landmarks[3][1]
+                    let x = this.facedata[0].landmarks[3][0]
+                    if ((obj.bbox[0] - 50 < x) && (x < obj.bbox[0] + obj.bbox[2] + 50) && (obj.bbox[1] - 50 < y) && (y < obj.bbox[1] + obj.bbox[3] + 50)) {
+                        console.log("sip");
+                        return
+                    }
                 }
             }
         });
+    }
+
+    drawSkeleton() {
+        if (this.pose) {
+            this.poseCanvasContext.clearRect(0, 0, 600, 600);
+            this.pose.keypoints.forEach((part, index) => {
+                if (part.score >= 0.2) {
+                    if ((part.part === "rightShoulder") || (part.part === "leftShoulder")) {
+                        this.poseCanvasContext.beginPath()
+                        this.poseCanvasContext.arc(part.position.x, part.position.y, 5, 0, 2*Math.PI)
+                        this.poseCanvasContext.fillStyle = '#F218D9'
+                        this.poseCanvasContext.fill()
+                    }
+                }
+            })
+
+            const adjacent = posenet.getAdjacentKeyPoints(this.pose.keypoints, 0.2)
+
+            adjacent.forEach(points => {
+                this.poseCanvasContext.beginPath();
+                this.poseCanvasContext.moveTo(points[0].position.x, points[0].position.y);
+                this.poseCanvasContext.lineTo(points[1].position.x, points[1].position.y);
+                this.poseCanvasContext.lineWidth = 3;
+                this.poseCanvasContext.strokeStyle = '#F218D9'
+                this.poseCanvasContext.stroke();
+            })
+        }
+    }
+
+    drawFace() {
+        if (this.facedata[0]) {
+            this.faceCanvasContext.clearRect(0, 0, 600, 600);
+            this.facedata[0].landmarks.forEach(part => {
+                this.faceCanvasContext.beginPath()
+                this.faceCanvasContext.arc(part[0], part[1], 5, 0, 2*Math.PI)
+                this.faceCanvasContext.fillStyle = '#33FFE4'
+                this.faceCanvasContext.fill()
+            })
+        }
     }
 
     videoError() {
@@ -114,6 +166,8 @@ class Camera extends React.Component {
                     ))
                 }
                 <video ref={this.cameraRef} style={{width: 600, height: 600}} width={600} height={600} autoPlay={true} />
+                <canvas className="face" style={{width: 600, height: 600}} width={600} height={600} ref={this.faceCanvasRef}></canvas>
+                <canvas className="pose" style={{width: 600, height: 600}} width={600} height={600} ref={this.poseCanvasRef}></canvas>
             </div>
         )
     }
