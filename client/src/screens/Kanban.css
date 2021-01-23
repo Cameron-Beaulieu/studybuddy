@@ -21,16 +21,15 @@
 
 .btn {
     background-color: #00A9B4;
-    color: white;
     border-style: none;
-    border-radius: 1rem;
     font-family: 'Alata';
-    font-weight: normal;
+    transition: 1s;
 }
 
 .btn:hover {
     background-color: white;
     color: #00A9B4;
+    transition: 1s;
 }
 
 .popup-content {

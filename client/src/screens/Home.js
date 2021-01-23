@@ -45,7 +45,7 @@ function Home() {
         ]
         //['pomodoro', '20/20 rule'];
         const buttons = buttonList.map((button) => {
-            return (<button key={button.name} title={button.description} onClick={() => {setSchedule(button.name);}}>{button.name}</button>)
+            return (<button className="home-btn" key={button.name} title={button.description} onClick={() => {setSchedule(button.name);}}>{button.name}</button>)
         });
         return buttons;
     }
@@ -68,12 +68,12 @@ function Home() {
             <h2 className="subtitle">START WORK SESSION</h2>
             <div id="choice-1" className="button-array">
                 {getTimeButtons()}
-                <button key="custom" onClick={chooseCustomTime}>custom</button>
+                <button className="home-btn" key="custom" onClick={chooseCustomTime}>custom</button>
             </div>
             <div id="choice-2" className="button-array">
-                <button key="restart" onClick={() => setChoiceLevel(1)}>restart</button>
+                <button className="home-btn" key="restart" onClick={() => setChoiceLevel(1)}>restart</button>
                 {getMethodButtons()}
-                <button key="custom" onClick={chooseCustomSchedule}>custom</button>
+                <button className="home-btn" key="custom" onClick={chooseCustomSchedule}>custom</button>
             </div>
         </div>
     );
