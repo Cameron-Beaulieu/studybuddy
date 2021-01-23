@@ -1,0 +1,41 @@
+#boards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    height: 100%;
+}
+
+.kanban {
+    height: 100%;
+}
+
+.container {
+    width: 100%;
+    text-align: left;
+}
+
+#kanban-btns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    background-color: #00A9B4;
+    color: white;
+    border-style: none;
+    border-radius: 1rem;
+    font-family: 'Alata';
+    font-weight: normal;
+}
+
+.btn:hover {
+    background-color: white;
+    color: #00A9B4;
+}
+
+.popup-content {
+    background: #00A9B4;
+}
+
+input {
+    padding: 0.5rem;
+}

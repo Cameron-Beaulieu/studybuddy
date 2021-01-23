@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC");
+@import url("https://fonts.googleapis.com/css2?family=Alata");
+
+.board{
+    background-color: #D2D7FF;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 1rem;
+    min-height: 100vh;
+    
+}
+
+hr {
+    background-color: white;
+    border-color: white;
+    color: white;
+    border-style: solid;
+    border-width: 0.1px;
+}
+
+h1 {
+    font-family: 'Alegreya Sans SC';
+    letter-spacing: 0.5rem;
+    font-weight: 300;
+    color: white;
+}

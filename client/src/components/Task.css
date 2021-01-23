@@ -1,0 +1,19 @@
+.task {
+    border-style: none;
+    border-radius: 1rem;
+    margin: 1rem 0;
+    padding: 0.5rem 0;
+    font-family: 'Alata';
+}
+
+.to-do{
+    background-color: white;
+}
+
+.in-progress{
+    background-color: #FFFCB8;
+}
+
+.done {
+    background-color: #BEFFB9;
+}
