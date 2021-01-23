@@ -19,6 +19,7 @@ class Camera extends React.Component {
         this.cameraRef = React.createRef();
         this.poseCanvasRef = React.createRef();
         this.faceCanvasRef = React.createRef();
+        this.sippsed = false;
         this.drawn = false;
         this.calibrated = false;
         this.boxes = [];
@@ -122,9 +123,9 @@ class Camera extends React.Component {
                 this.findMaxFace(data)
             } else {
                 if (processPose.checkFace(data, this.xMaxRightEye,this.yMaxRightEye,this.xMinRightEye,this.yMinRightEye,this.xMaxLeftEye,this.yMaxLeftEye,this.xMinLeftEye,this.yMinLeftEye)) {
-                    this.context.setSlack(this.context.slack + 0.5);
+                    this.context.setSlack(this.context.slack + 0.5/60);
                 } else {
-                    this.context.setProductivity(this.context.productivity + 0.5);
+                    this.context.setProductive(this.context.productive + 0.5/60);
                 }
             }
         })
@@ -139,9 +140,9 @@ class Camera extends React.Component {
                 this.findMaxPose(pose)
             } else {
                 if (processPose.checkShoulders(pose, this.xMaxRightShoulder,this.yMaxRightShoulder,this.xMinRightShoulder,this.yMinRightShoulder,this.xMaxLeftShoulder,this.yMaxLeftShoulder,this.xMinLeftShoulder,this.yMinLeftShoulder)) {
-                    this.context.setBadPostureTime(this.context.badPostureTime + 0.5);
+                    this.context.setBadPostureTime(this.context.badPostureTime + 0.5/60);
                 } else {
-                    this.context.setGoodPostureTime(this.context.goodPostureTime + 0.5);
+                    this.context.setGoodPostureTime(this.context.goodPostureTime + 0.5/60);
                 }
             }
         })
@@ -207,8 +208,15 @@ class Camera extends React.Component {
                     let y = this.facedata[0].landmarks[3][1]
                     let x = this.facedata[0].landmarks[3][0]
                     if ((obj.bbox[0] - 50 < x) && (x < obj.bbox[0] + obj.bbox[2] + 50) && (obj.bbox[1] - 50 < y) && (y < obj.bbox[1] + obj.bbox[3] + 50)) {
-                        console.log("sip");
+                        if ((!this.sipped && new Date().getTime() - this.sipCooldown > 2000) || (!this.sipCooldown)) {
+                            console.log("sip");
+                            this.sipped = true;
+                            this.context.setSips(this.context.sips + 1);
+                        }
+                        this.sipCooldown = new Date().getTime()
                         return
+                    } else {
+                        this.sipped = false;
                     }
                 }
             }

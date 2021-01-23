@@ -2,43 +2,53 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import UserContext from './userContext';
 import './App.css';
-import Camera from './components/Camera';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from 'react-router-dom';
 import Home from './screens/Home';
 import Kanban from './screens/Kanban';
 import Stats from './screens/Stats';
 
 function App() {
+  const [sessionTimeMinutes, setSessionTimeMinutes] = useState(0);
   const [productive, setProductive] = useState(0);
   const [slack, setSlack] = useState(0);
+  const [breakMin, setBreakMin] = useState(0);
+  const [workMin, setWorkMin] = useState(0);
   const [breakTime, setBreakTime] = useState(0);
   const [overBreak, setOverBreak] = useState(0);
   const [onBreak, setOnBreak] = useState(false);
   const [badPostureTime, setBadPostureTime] = useState(0);
   const [goodPostureTime, setGoodPostureTime] = useState(0);
+  const [sips, setSips] = useState(0);
 
   return (
     <Router>
       <UserContext.Provider value={{
-        productive: productive,
+        sessionTime: sessionTimeMinutes, // minutes
+        setSessionTime: setSessionTimeMinutes,
+        productive: productive, // minutes
         setProductive: setProductive,
-        slack: slack,
+        slack: slack, // minutes
         setSlack: setSlack,
-        breakTime: breakTime,
+        breakMin: breakMin, // minutes
+        setBreakMin: setBreakMin,
+        workMin: workMin, // minutes
+        setWorkMin: setWorkMin,
+        breakTime: breakTime, // minutes
         setBreak: setBreakTime,
-        overBreak: overBreak,
+        overBreak: overBreak, // minutes
         setOverBreak: setOverBreak,
-        onBreak: onBreak,
+        onBreak: onBreak, // boolean
         setOnBreak: setOnBreak,
-        badPostureTime: badPostureTime,
+        badPostureTime: badPostureTime, // minutes
         setBadPostureTime: setBadPostureTime,
-        goodPostureTime: goodPostureTime,
-        setGoodPostureTime: setGoodPostureTime
+        goodPostureTime: goodPostureTime, // minutes
+        setGoodPostureTime: setGoodPostureTime,
+        sips: sips, // integer
+        setSips: setSips
       }}>
         <div className="App">
           <Switch>

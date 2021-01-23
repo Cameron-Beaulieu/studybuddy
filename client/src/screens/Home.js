@@ -1,4 +1,6 @@
+import { useContext } from 'react';
 import './Home.css';
+import UserContext from '../userContext';
 import blobs from '../assets/blobs.png';
 import title from '../assets/name.png';
 import { useEffect, useState } from 'react';
@@ -7,8 +9,14 @@ import Popup from 'reactjs-popup';
 function Home() {
 
     const [choiceLevel, setChoiceLevel] = useState(1);  // lvl 1 = choosing time, lvl 2 = choosing schedule
-    const [sessionTime, setSessionTime] = useState(0); // how long session is
     const [schedule, setSchedule] = useState(''); // schedule choice
+
+    const context = useContext(UserContext);
+    var sessionTime = 0;
+    const setSessionTime = (hour) => {
+        context.setSessionTimeMinutes(hour*60);
+        sessionTime = hour;
+    }
 
 
     // display button arrays depending on choice level
@@ -50,17 +58,6 @@ function Home() {
             return (<button className="home-btn" key={button.name} title={button.description} onClick={() => {setSchedule(button.name);}}>{button.name}</button>)
         });
         return buttons;
-    }
-
-    // choose custom time
-    function chooseCustomTime(){
-        // make like a popup
-        setSessionTime(0); // arbitrary; delete later
-    }
-
-    function chooseCustomSchedule(){
-        // make popup
-        setSchedule(''); // arbitrary; delete later
     }
 
     //popup for custom schedule
@@ -106,6 +103,8 @@ function Home() {
             breakSec: breakTime,
             workSec: workTime
         }
+        context.setBreakMin(breakTime / 60);
+        context.setWorkMin(workTime / 60);
         return scheduleTimes;
     }
 

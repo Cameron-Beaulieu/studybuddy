@@ -5,6 +5,7 @@ import studybuddy from '../assets/name-w-blobs.png';
 import Popup from 'reactjs-popup';
 import Timer from '../components/Timer'
 import React, { useState } from 'react';
+import UserContext from '../userContext';
 import Draggable from 'react-draggable';
 import 'reactjs-popup/dist/index.css';
 import will from '../assets/will.png';
@@ -35,6 +36,8 @@ function Kanban({ time }) {
                 status: props.status
             }
         }
+
+        static contextType = UserContext;
 
         componentWillUnmount() { // debugging
             console.log('unmounting');
