@@ -2,12 +2,14 @@ import './Home.css';
 import blobs from '../assets/blobs.png';
 import title from '../assets/name.png';
 import { useEffect, useState } from 'react';
+import Popup from 'reactjs-popup';
 
 function Home() {
 
     const [choiceLevel, setChoiceLevel] = useState(1);  // lvl 1 = choosing time, lvl 2 = choosing schedule
     const [sessionTime, setSessionTime] = useState(0); // how long session is
     const [schedule, setSchedule] = useState(''); // schedule choice
+
 
     // display button arrays depending on choice level
     useEffect(() =>{
@@ -61,19 +63,84 @@ function Home() {
         setSchedule(''); // arbitrary; delete later
     }
 
+    //popup for custom schedule
+    const [openSchedule, setScheduleOpen] = useState(false);
+    const closeScheduleModal = () => setScheduleOpen(false);
+
+
+    // create a custom schedule
+    function chooseCustomSchedule() {
+        const workInput = document.getElementById('work-input').value;
+        const breakInput = document.getElementById('break-input').value;
+        setSchedule(`${workInput} ${breakInput}`);
+    }
+
+    //popup for adding tasks
+    const [openTime, setTimeOpen] = useState(false);
+    const closeTimeModal = () => setTimeOpen(false);
+
+
+    // create a custom session time
+    function chooseCustomTime() {
+        const timeInput = document.getElementById('time-input').value;
+        setSessionTime(timeInput);
+    }
+
+    function handleSchedule(){
+        var breakTime, workTime;
+        if (schedule === 'pomodoro'){
+            breakTime = 300;
+            workTime = 1500;
+        }
+        else if (schedule === '20/20 rule'){
+            breakTime = 20;
+            workTime = 1200;
+        }
+        //for custom
+        else{
+            var parts = schedule.split(" ")
+            breakTime = parseInt(parts[1]);//however we track the break converted to seconds
+            workTime = parseInt(parts[0])//however we track the workTime in seconds
+        }
+        var scheduleTimes = {
+            breakSec: breakTime,
+            workSec: workTime
+        }
+        return scheduleTimes;
+    }
+
     return (
         <div className="home">
+            <Popup contentStyle={{background: 'none', borderStyle: 'none'}} open={openTime} closeOnDocumentClick onClose={closeTimeModal}>
+                    <div className="popup-div">
+                        <span>input total session time in minutes:</span>
+                        <form>
+                        <input id="time-input" placeholder="time in minutes..."></input>
+                        <button className="btn" onClick={() => { chooseCustomTime(); setTimeOpen(false); }}>done</button>
+                        </form>
+                    </div>
+            </Popup>
+            <Popup contentStyle={{background: 'none', borderStyle: 'none'}} open={openSchedule} closeOnDocumentClick onClose={closeScheduleModal}>
+                    <div className="popup-div">
+                        <span>input interval of work time followed by break time in minutes:</span>
+                        <form>
+                        <input id="work-input" placeholder="work interval..."></input>
+                        <input id="break-input" placeholder="break interval..."></input>
+                        <button className="btn" onClick={() => { chooseCustomSchedule(); setScheduleOpen(false); }}>done</button>
+                        </form>
+                    </div>
+            </Popup>
             <img id="blobs" src={blobs} alt="studybuddy's logo"></img>
             <img id="title" src={title} alt="welcome to studybuddy"></img>
             <h2 className="subtitle">START WORK SESSION</h2>
             <div id="choice-1" className="button-array">
                 {getTimeButtons()}
-                <button className="home-btn" key="custom" onClick={chooseCustomTime}>custom</button>
+                <button key="custom" onClick={() => setTimeOpen(o => !o)}>custom</button>
             </div>
             <div id="choice-2" className="button-array">
                 <button className="home-btn" key="restart" onClick={() => setChoiceLevel(1)}>restart</button>
                 {getMethodButtons()}
-                <button className="home-btn" key="custom" onClick={chooseCustomSchedule}>custom</button>
+                <button key="custom" onClick={() => setScheduleOpen(o => !o)}>custom</button>
             </div>
         </div>
     );
