@@ -33,9 +33,28 @@
 }
 
 .popup-content {
+    border-radius: 1rem;
+}
+
+.popup-div {
     background: #00A9B4;
+    border-radius: 1rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.popup-div button{
+    padding: 0.25rem 0.5rem;
+    min-width: 0;
+    background-color: #9DA7FF;
+    border-style: solid;
 }
 
 input {
     padding: 0.5rem;
+    border-radius: 1rem;
+    border-style: none;
+    margin-top: 0.5rem;
 }
