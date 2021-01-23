@@ -26,16 +26,16 @@ export default class Timer extends Component {
                     if(hours === 0){
                     clearInterval(this.myInterval)
                     }
+                    else if(hours > 0){
+                        this.setState(({ hours }) => ({
+                            hours: hours - 1,
+                            minutes: 59,
+                            seconds: 59
+                        }))
+                    }
                 } else if (minutes > 0){
                     this.setState(({ minutes }) => ({
                         minutes: minutes - 1,
-                        seconds: 59
-                    }))
-                }
-                else{
-                    this.setState(({ hours }) => ({
-                        hours: hours - 1,
-                        minutes: 59,
                         seconds: 59
                     }))
                 }
