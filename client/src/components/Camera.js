@@ -3,6 +3,7 @@ import './Camera.css';
 
 const coco = require('@tensorflow-models/coco-ssd');
 const posenet = require('@tensorflow-models/posenet');
+const blazeface = require('@tensorflow-models/blazeface');
 
 class Camera extends React.Component {
     constructor(props) {
@@ -14,6 +15,9 @@ class Camera extends React.Component {
         this.cameraRef = React.createRef();
         this.model = undefined;
         this.net = undefined;
+        this.pose = undefined;
+        this.face = undefined;
+        this.facedata = undefined;
     }
 
     componentDidMount() {
@@ -22,13 +26,20 @@ class Camera extends React.Component {
             this.cameraRef.current.srcObject = stream;
             this.cameraRef.current.onloadedmetadata = () => { this.cameraRef.current.play() };
 
-            /*
-            coco.load()
+            coco.load({
+                base: "mobilenet_v2"
+            })
             .then((loaded) => {
                 this.model = loaded;
                 setInterval(this.detectObjects.bind(this), 500)
+                setInterval(this.detectSip.bind(this), 500)
             })
-            */
+
+            blazeface.load()
+            .then(loaded => {
+                this.face = loaded;
+                setInterval(this.detectFace.bind(this), 100);
+            })
 
             posenet.load({
                 architecture: "MobileNetV1",
@@ -46,10 +57,17 @@ class Camera extends React.Component {
         })
     }
 
+    detectFace() {
+        this.face.estimateFaces(this.cameraRef.current, false)
+        .then(data => {
+            this.facedata = data;
+        })
+    }
+
     detectPose() {
         this.net.estimateSinglePose(this.cameraRef.current)
         .then(pose => {
-            console.log(pose);
+            this.pose = pose
         })
     }
 
@@ -59,18 +77,25 @@ class Camera extends React.Component {
             let children = []
 
             for (let n = 0; n < predictions.length; n++) {
-                /*
-                if (predictions[n].score > 0.66) {
-                    children.push(predictions[n])
-                }
-                */
                children.push(predictions[n])
             }
 
-            console.log(predictions)
-
             this.setState({ detectedObjects: children })
         })
+    }
+
+    detectSip() {
+        this.state.detectedObjects.forEach(obj => {
+            if ((obj.class === "donut") || (obj.class === "wine glass") || (obj.class === "bottle") || (obj.class === "cup")) {
+                console.log("cup detected");
+                let y = this.facedata[0].landmarks[3][1]
+                let x = this.facedata[0].landmarks[3][0]
+                if ((obj.bbox[0] - 50 < x) && (x < obj.bbox[0] + obj.bbox[2] + 50) && (obj.bbox[1] - 50 < y) && (y < obj.bbox[1] + obj.bbox[3] + 50)) {
+                    console.log("sip");
+                    return
+                }
+            }
+        });
     }
 
     videoError() {
@@ -81,14 +106,12 @@ class Camera extends React.Component {
         return (
             <div ref={this.divRef} className="camView">
                 {
-                    /*
                     this.state.detectedObjects.map((prediction) => (
                         <>
                             <div className="highlighter" style={{left: prediction.bbox[0], top: prediction.bbox[1], width: prediction.bbox[2], height: prediction.bbox[3]}}></div>
                             <p style={{marginLeft: prediction.bbox[0], marginTop: prediction.bbox[1] - 1, width: prediction.bbox[2] - 10, top: 0, left: 0}}>{prediction.class} - with {Math.round(parseFloat(prediction.score) * 100)}% confidence</p>
                         </>
                     ))
-                    */
                 }
                 <video ref={this.cameraRef} style={{width: 600, height: 600}} width={600} height={600} autoPlay={true} />
             </div>
