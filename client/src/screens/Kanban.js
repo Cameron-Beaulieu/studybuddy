@@ -115,14 +115,14 @@ function Kanban({time}) {
     return (
         <div className="kanban">
             <Popup contentStyle={{background: 'none', borderStyle: 'none'}} open={open} closeOnDocumentClick onClose={closeModal}>
-                    <div className="popup-div">
+                    <div className="task-popup">
                         <span>new task:</span>
                         <form>
                         <input id="task-input" placeholder="task name..."></input>
                         <button className="btn" onClick={() => { addTask(); setOpen(false); }}>+</button>
                         </form>
                     </div>
-                </Popup>
+            </Popup>
             <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
                 <Timer font='Alata' fontColor='#9DA7FF' hours={time} minutes={0} seconds={0} postText="hours left"/>

@@ -36,7 +36,7 @@
     border-radius: 1rem;
 }
 
-.popup-div {
+.task-popup {
     background: #00A9B4;
     border-radius: 1rem;
     color: white;
@@ -45,7 +45,7 @@
     padding: 1rem;
 }
 
-.popup-div button{
+.task-popup button{
     padding: 0.25rem 0.5rem;
     min-width: 0;
     background-color: #9DA7FF;
