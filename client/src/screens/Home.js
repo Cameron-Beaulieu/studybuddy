@@ -12,8 +12,10 @@ function Home() {
         document.getElementById('choice-' + choiceLevel).style.display = 'flex';
         if (choiceLevel === 1){
             document.getElementById('choice-2').style.display = 'none';
+            document.querySelector('.subtitle').innerHTML = 'START WORK SESSION';
         }else if (choiceLevel === 2){
             document.getElementById('choice-1').style.display = 'none';
+            document.querySelector('.subtitle').innerHTML = 'BREAK SCHEDULING METHOD';
         }
     });
 
