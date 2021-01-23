@@ -5,6 +5,10 @@
   position: absolute;
 }
 
+.calibration {
+  background: rgba(0, 255, 255, 0.25);
+}
+
 .camView {
   position: relative;
   float: left;

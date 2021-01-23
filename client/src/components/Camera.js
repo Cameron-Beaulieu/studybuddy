@@ -1,6 +1,8 @@
 import React from 'react';
 import './Camera.css';
 
+import * as processPose from '../scripts/faceDetection';
+
 const coco = require('@tensorflow-models/coco-ssd');
 const posenet = require('@tensorflow-models/posenet');
 const blazeface = require('@tensorflow-models/blazeface');
@@ -9,13 +11,17 @@ class Camera extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            detectedObjects : []
+            detectedObjects: [],
+            calibrationBoxes: []
         }
         this.divRef = React.createRef();
         this.cameraRef = React.createRef();
         this.poseCanvasRef = React.createRef();
         this.faceCanvasRef = React.createRef();
         this.drawn = false;
+        this.calibrated = false;
+        this.boxes = [];
+        this.calibrationPadding = 20;
         this.canvasContext = undefined;
         this.faceCanvasContext = undefined;
         this.poseCanvasContext = undefined;
@@ -39,24 +45,25 @@ class Camera extends React.Component {
                 this.model = loaded;
                 setInterval(this.detectObjects.bind(this), 500)
                 setInterval(this.detectSip.bind(this), 500)
-            })
 
-            blazeface.load()
-            .then(loaded => {
-                this.face = loaded;
-                setInterval(this.detectFace.bind(this), 500);
-            })
+                blazeface.load()
+                .then(loaded => {
+                    this.face = loaded;
+                    setInterval(this.detectFace.bind(this), 500);
 
-            posenet.load({
-                architecture: "MobileNetV1",
-                multiplier: 1.0,
-                outputStride: 16,
-                inputResolution: {width: 600, height: 600},
-                quantBytes: 2
-            })
-            .then(net => {
-                this.net = net;
-                setInterval(this.detectPose.bind(this), 500)
+                    posenet.load({
+                        architecture: "MobileNetV1",
+                        multiplier: 1.0,
+                        outputStride: 16,
+                        inputResolution: {width: 600, height: 600},
+                        quantBytes: 2
+                    })
+                    .then(net => {
+                        this.net = net;
+                        setInterval(this.detectPose.bind(this), 500);
+                        this.calibrate();
+                    })
+                })
             })
 
             this.faceCanvasContext = this.faceCanvasRef.current.getContext('2d');
@@ -67,11 +74,51 @@ class Camera extends React.Component {
         })
     }
 
+    calibrate() {
+        this.calibrated = false;
+        console.log("Starting calibration")
+        setTimeout(() => {
+            this.calibrated = true
+            let boxes = []
+            boxes.push({
+                left: this.xMinLeftEye - this.calibrationPadding,
+                top: this.yMinLeftEye - this.calibrationPadding,
+                width: this.xMaxLeftEye - this.xMinLeftEye + this.calibrationPadding * 2,
+                height: this.yMaxLeftEye - this.yMinLeftEye + this.calibrationPadding * 2
+            })
+            boxes.push({
+                left: this.xMinRightEye - this.calibrationPadding,
+                top: this.yMinRightEye - this.calibrationPadding,
+                width: this.xMaxRightEye - this.xMinRightEye + this.calibrationPadding * 2,
+                height: this.yMaxRightEye - this.yMinRightEye + this.calibrationPadding * 2
+            })
+            boxes.push({
+                left: this.xMinLeftShoulder - this.calibrationPadding,
+                top: this.yMinLeftShoulder - this.calibrationPadding,
+                width: this.xMaxLeftShoulder - this.xMinLeftShoulder + this.calibrationPadding * 2,
+                height: this.yMaxLeftShoulder - this.yMinLeftShoulder + this.calibrationPadding * 2
+            })
+            boxes.push({
+                left: this.xMinRightShoulder - this.calibrationPadding,
+                top: this.yMinRightShoulder - this.calibrationPadding,
+                width: this.xMaxRightShoulder - this.xMinRightShoulder + this.calibrationPadding * 2,
+                height: this.yMaxRightShoulder - this.yMinRightShoulder + this.calibrationPadding * 2
+            })
+            console.log("Calibration complete")
+            this.setState({ calibrationBoxes: boxes });
+        }, 10000)
+    }
+
     detectFace() {
         this.face.estimateFaces(this.cameraRef.current, false)
         .then(data => {
             this.facedata = data;
             this.drawFace()
+            if (!this.calibrated) {
+                this.findMaxFace(data)
+            } else {
+                processPose.checkFace(data, this.xMaxRightEye,this.yMaxRightEye,this.xMinRightEye,this.yMinRightEye,this.xMaxLeftEye,this.yMaxLeftEye,this.xMinLeftEye,this.yMinLeftEye)
+            }
         })
     }
 
@@ -80,7 +127,52 @@ class Camera extends React.Component {
         .then(pose => {
             this.pose = pose
             this.drawSkeleton()
+            if (!this.calibrated) {
+                this.findMaxPose(pose)
+            } else {
+                processPose.checkShoulders(pose, this.xMaxRightShoulder,this.yMaxRightShoulder,this.xMinRightShoulder,this.yMinRightShoulder,this.xMaxLeftShoulder,this.yMaxLeftShoulder,this.xMinLeftShoulder,this.yMinLeftShoulder)
+            }
         })
+    }
+
+    findMaxFace(face) {
+        var poseEye = processPose.checkEyePosition(face);
+        if (poseEye[0] > this.xMaxLeftEye || !this.xMaxLeftEye)
+            this.xMaxLeftEye = poseEye[0];
+        else if(poseEye[0] < this.xMinLeftEye || !this.xMinLeftEye)
+            this.xMinLeftEye = poseEye[0];
+        if (poseEye[1] > this.yMaxLeftEye || !this.yMaxLeftEye)
+            this.yMaxLeftEye = poseEye[1];
+        else if(poseEye[1] < this.yMinLeftEye || !this.yMinLeftEye)
+            this.yMinLeftEye = poseEye[1];
+        if (poseEye[2] > this.xMaxRightEye || !this.xMaxRightEye)
+            this.xMaxRightEye = poseEye[2];
+        else if(poseEye[2] < this.xMinRightEye || !this.xMinRightEye)
+            this.xMinRightEye = poseEye[2];
+        if (poseEye[3] > this.yMaxRightEye || !this.yMaxRightEye)
+            this.yMaxRightEye = poseEye[3];
+        else if(poseEye[3] < this.yMinRightEye || !this.yMinRightEye)
+            this.yMinRightEye = poseEye[3];
+    }
+
+    findMaxPose(pose) {
+        var poseShoulders = processPose.checkShouldersPosition(pose);
+        if (poseShoulders[0] > this.xMaxLeftShoulder || !this.xMaxLeftShoulder)
+            this.xMaxLeftShoulder = poseShoulders[0];
+        else if (poseShoulders[0] < this.xMinLeftShoulder || !this.xMinLeftShoulder)
+            this.xMinLeftShoulder = poseShoulders[0];
+        if (poseShoulders[1] > this.yMaxLeftShoulder || !this.yMaxLeftShoulder)
+            this.yMaxLeftShoulder = poseShoulders[1];
+        else if (poseShoulders[1] < this.yMinLeftShoulder || !this.yMinLeftShoulder)
+            this.yMinLeftShoulder = poseShoulders[1];
+        if(poseShoulders[2] > this.xMaxRightShoulder || !this.xMaxRightShoulder)
+            this.xMaxRightShoulder = poseShoulders[2];
+        else if(poseShoulders[2] < this.xMinRightShoulder || !this.xMinRightShoulder)
+            this.xMinRightShoulder = poseShoulders[2];
+        if(poseShoulders[3] > this.yMaxRightShoulder || !this.yMaxRightShoulder)
+            this.yMaxRightShoulder = poseShoulders[3]
+        else if(poseShoulders[3] < this.yMinRightShoulder || !this.yMinRightShoulder)
+            this.yMinRightShoulder = poseShoulders[3];
     }
 
     detectObjects() {
@@ -98,7 +190,7 @@ class Camera extends React.Component {
 
     detectSip() {
         this.state.detectedObjects.forEach(obj => {
-            if (this.facedata !== undefined) {
+            if (this.facedata) {
                 if ((obj.class === "donut") || (obj.class === "wine glass") || (obj.class === "bottle") || (obj.class === "cup")) {
                     let y = this.facedata[0].landmarks[3][1]
                     let x = this.facedata[0].landmarks[3][0]
@@ -158,10 +250,17 @@ class Camera extends React.Component {
         return (
             <div ref={this.divRef} className="camView">
                 {
-                    this.state.detectedObjects.map((prediction) => (
+                    this.state.detectedObjects.map((prediction, index) => (
                         <>
-                            <div className="highlighter" style={{left: prediction.bbox[0], top: prediction.bbox[1], width: prediction.bbox[2], height: prediction.bbox[3]}}></div>
-                            <p style={{marginLeft: prediction.bbox[0], marginTop: prediction.bbox[1] - 1, width: prediction.bbox[2] - 10, top: 0, left: 0}}>{prediction.class} - with {Math.round(parseFloat(prediction.score) * 100)}% confidence</p>
+                            <div key={index + "obj-h"} className="highlighter" style={{left: prediction.bbox[0], top: prediction.bbox[1], width: prediction.bbox[2], height: prediction.bbox[3]}}></div>
+                            <p key={index + "obj-p"} style={{marginLeft: prediction.bbox[0], marginTop: prediction.bbox[1] - 1, width: prediction.bbox[2] - 10, top: 0, left: 0}}>{prediction.class} - with {Math.round(parseFloat(prediction.score) * 100)}% confidence</p>
+                        </>
+                    ))
+                }
+                {
+                    this.state.calibrationBoxes.map((box, index) => (
+                        <>
+                            <div className="highlighter calibration" style={{left: box.left, top: box.top, width: box.width, height: box.height}} key={index + "cal-h"}></div>
                         </>
                     ))
                 }
