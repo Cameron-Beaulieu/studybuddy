@@ -24,6 +24,7 @@ export default class Timer extends Component {
         console.log('mounting timer');
         this.myInterval = setInterval(() => {
             const { hours, seconds, minutes } = this.state
+            this.props.onSecondTick();
 
             if (seconds > 0) {
                 this.setState(({ seconds }) => ({

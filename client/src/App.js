@@ -17,7 +17,7 @@ function App() {
   const [slack, setSlack] = useState(0);
   const [breakMin, setBreakMin] = useState(0);
   const [workMin, setWorkMin] = useState(0);
-  const [breakTime, setBreakTime] = useState(0);
+  const [timeOnBreak, setTimeOnBreak] = useState(0);
   const [overBreak, setOverBreak] = useState(0);
   const [onBreak, setOnBreak] = useState(false);
   const [badPostureTime, setBadPostureTime] = useState(0);
@@ -37,8 +37,8 @@ function App() {
         setBreakMin: setBreakMin,
         workMin: workMin, // minutes
         setWorkMin: setWorkMin,
-        breakTime: breakTime, // minutes
-        setBreak: setBreakTime,
+        timeOnBreak: timeOnBreak, // minutes
+        setTimeOnBreak: setTimeOnBreak,
         overBreak: overBreak, // minutes
         setOverBreak: setOverBreak,
         onBreak: onBreak, // boolean

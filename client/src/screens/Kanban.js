@@ -178,6 +178,8 @@ function Kanban() {
                     <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.breakMin))[0]} minutes={convertTime(context.breakMin)[1]} seconds={convertTime(context.breakMin)[2]} postText="till break over" onFinish={() => {
                         context.setOnBreak(false);
                         setOnBreak(false);
+                    }} onSecondTick={() => {
+                        context.setTimeOnBreak(context.timeOnBreak + 1/60);
                     }}/>
                 </div>
             </Popup>

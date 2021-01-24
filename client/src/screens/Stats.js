@@ -33,12 +33,8 @@ function Stats() {
     }
 
     function displayChartInfo() {
-        const timeOnBreak = Math.floor((context.sessionTime / (context.breakMin + context.workMin))* context.breakMin);
-        const ratioProductive = context.productive / (context.productive + context.slack + timeOnBreak);
-        const ratioSlack = context.slack / (context.productive + context.slack + timeOnBreak);
-        const ratioBreak = timeOnBreak / (context.productive + context.slack + timeOnBreak);
         return (
-            <h2 id="chartInfo">{Math.floor(ratioProductive * context.sessionTime)} minutes productive, {Math.floor(ratioSlack * context.sessionTime)} minutes unproductive, {Math.floor(ratioBreak * context.sessionTime)} minutes on break</h2>
+            <h2 id="chartInfo">{Math.floor(context.productive)} minutes productive, {Math.floor(context.slack)} minutes unproductive, {Math.floor(context.timeOnBreak)} minutes on break</h2>
         )
     }
     function displayStats() {
@@ -53,14 +49,10 @@ function Stats() {
     }
     function generateData(){
         console.log(context.sessionTimeMinutes);
-        const timeOnBreak = Math.floor((context.sessionTime / (context.breakMin+ context.workMin))*context.breakMin);
-        const ratioProductive = context.productive / (context.productive + context.slack + timeOnBreak);
-        const ratioSlack = context.slack / (context.productive + context.slack + timeOnBreak);
-        const ratioBreak = timeOnBreak / (context.productive + context.slack + timeOnBreak);
         const data = [
-            { title: `productive time: ${Math.floor(ratioProductive * context.sessionTime)} minutes`, key: 'productive time', value: context.productive, color: '#00A9B4' },
-            { title: `wasted time: ${Math.floor(ratioSlack * context.sessionTime)} minutes`, key: 'wasted time', value: context.slack, color: '#AAFAFF' },
-            { title: `break time: ${Math.floor(ratioBreak * context.sessionTime)} minutes`, key: 'break time', value: timeOnBreak, color: '#00747F' },
+            { title: `productive time: ${Math.floor(context.productive)} minutes`, key: 'productive time', value: context.productive, color: '#00A9B4' },
+            { title: `wasted time: ${Math.floor(context.slack)} minutes`, key: 'wasted time', value: context.slack, color: '#AAFAFF' },
+            { title: `break time: ${Math.floor(context.timeOnBreak)} minutes`, key: 'break time', value: context.timeOnBreak, color: '#00747F' },
         ]
         return data;
     }
