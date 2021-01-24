@@ -12,7 +12,6 @@ import UserContext from '../userContext';
 import Draggable from 'react-draggable';
 import 'reactjs-popup/dist/index.css';
 import will from '../assets/will.svg';
-import { useContext } from 'react';
 
 function Kanban({ time }) {
 
