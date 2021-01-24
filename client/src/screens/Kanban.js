@@ -119,6 +119,8 @@ function Kanban() {
     // break popup
     const [onBreak, setOnBreak] = useState(false);
 
+    const [sound, setSound] = useState(true);
+
     // add new task (defaults to to-do board)
     function addTask() {
         const input = document.getElementById('task-input').value;
@@ -212,13 +214,18 @@ function Kanban() {
             <div id="kanban-btns">
                 {showCamera ? <button className = "btn" onClick = {() => setCamera(o => !o)}>close camera</button>:<button className = "btn" onClick = {() => setCamera(o => !o)}>view camera</button>}
                 {calibrating ? <button className="btn">calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>re-calibrate</button>}
+                <button className="btn" onClick={() => setSound(o => !o)}>sound currently {sound ? "on" : "off"}</button>
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
             <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)} onSipWarning={waterPopupOpen ? () => {} : () => {
-                playWater();
+                if (sound) {
+                    playWater();
+                }
                 drinkWater(true)
             }} onPostureWarning={posturePopupOpen ? () => {} : () => {
-                playPosture();
+                if (sound) {
+                    playPosture();
+                }
                 fixPosture(true);
             }}></Camera>
             <div id="boards">
