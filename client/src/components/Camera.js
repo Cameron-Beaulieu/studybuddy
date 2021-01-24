@@ -175,7 +175,7 @@ class Camera extends React.Component {
                     this.context.setGoodPostureTime(this.context.goodPostureTime + 0.5/60);
                     this.badPostureCombo = 0;
                 }
-                if (this.badPostureCombo >= 5) {
+                if (this.badPostureCombo >= 10) {
                     this.props.onPostureWarning()
                 }
             }
