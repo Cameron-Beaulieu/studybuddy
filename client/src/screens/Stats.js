@@ -60,7 +60,7 @@ function Stats() {
         const data = [
             { title: `productive time: ${Math.floor(ratioProductive * context.sessionTime)} minutes`, key: 'productive time', value: context.productive, color: '#00A9B4' },
             { title: `wasted time: ${Math.floor(ratioSlack * context.sessionTime)} minutes`, key: 'wasted time', value: context.slack, color: '#AAFAFF' },
-            { title: `break time: ${Math.floor(ratioBreak * context.sessionTime)} minutes`, key: 'break time', value: context.breakTime, color: '#00747F' },
+            { title: `break time: ${Math.floor(ratioBreak * context.sessionTime)} minutes`, key: 'break time', value: timeOnBreak, color: '#00747F' },
         ]
         return data;
     }
