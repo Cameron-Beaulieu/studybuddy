@@ -79,7 +79,6 @@ function Kanban() {
                 }
             } else if (newX < this.bounds.inProgress) {
                 if (currentStatus !== 'in-progress') {
-                    this.removeFromList(); // remove from old board
                     setProgress(progressTasks.concat(this.name));
                     this.setState({
                         status: 'in-progress'
@@ -89,7 +88,6 @@ function Kanban() {
                 }
             } else if (newX >= this.bounds.inProgress) {
                 if (currentStatus !== 'done') {
-                    this.removeFromList(); // remove from old board
                     setDone(doneTasks.concat(this.name));
                     this.setState({
                         status: 'done'
@@ -120,7 +118,6 @@ function Kanban() {
     function addTask() {
         const input = document.getElementById('task-input').value;
         setToDo(toDoTasks.concat(input));
-        //console.log(todo);
     }
 
     // populate boards based on task arrays
