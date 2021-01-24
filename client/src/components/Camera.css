@@ -27,6 +27,8 @@
 
 video {
   display: block;
+  border-style: none;
+  border-radius: 2rem;
 }
 
 canvas {
