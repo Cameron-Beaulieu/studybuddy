@@ -145,7 +145,7 @@ class Camera extends React.Component {
             this.drawFace()
             if (!this.calibrated) {
                 this.findMaxFace(data)
-            } else {
+            } else if (!this.context.onBreak) {
                 if (this.facedata) {
                     if (this.facedata[0]) {
                         if (processPose.checkFace(data, this.xMaxRightEye,this.yMaxRightEye,this.xMinRightEye,this.yMinRightEye,this.xMaxLeftEye,this.yMaxLeftEye,this.xMinLeftEye,this.yMinLeftEye)) {
@@ -166,7 +166,7 @@ class Camera extends React.Component {
             this.drawSkeleton()
             if (!this.calibrated) {
                 this.findMaxPose(pose)
-            } else {
+            } else if (!this.context.onBreak) {
                 if (processPose.checkShoulders(pose, this.xMaxRightShoulder,this.yMaxRightShoulder,this.xMinRightShoulder,this.yMinRightShoulder,this.xMaxLeftShoulder,this.yMaxLeftShoulder,this.xMinLeftShoulder,this.yMinLeftShoulder)) {
                     this.context.setBadPostureTime(this.context.badPostureTime + 0.5/60);
                 } else {
@@ -232,7 +232,7 @@ class Camera extends React.Component {
     detectSip() {
         let nonPersonDetected = false
         this.state.detectedObjects.forEach(obj => {
-            if (this.facedata) {
+            if (!this.context.onBreak && this.facedata) {
                 if (this.facedata[0]) {
                     // if ((obj.class === "donut") || (obj.class === "wine glass") || (obj.class === "bottle") || (obj.class === "cup")) {
                     if (obj.class !== "person") {
