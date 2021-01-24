@@ -1,5 +1,8 @@
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import useSound from 'use-sound';
+import waterSfx from '../assets/water.wav';
+import postureSfx from '../assets/posture.wav';
 import './Kanban.css';
 import '../components/KanbanBoard.css';
 import '../components/Task.css'
@@ -23,6 +26,8 @@ function Kanban() {
     const [showCamera, setCamera] = useState(false);
     const [calibrating, setCalibrating] = useState(true);
     const context = useContext(UserContext);
+    const [playWater] = useSound(waterSfx);
+    const [playPosture] = useSound(postureSfx);
     const history = useHistory();
 
     class Task extends React.Component {
@@ -209,7 +214,13 @@ function Kanban() {
                 {calibrating ? <button className="btn">calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>re-calibrate</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
-            {/*<Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)}></Camera>*/}
+            <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)} onSipWarning={waterPopupOpen ? () => {} : () => {
+                drinkWater(true)
+                playWater();
+            }} onPostureWarning={posturePopupOpen ? () => {} : () => {
+                fixPosture(true);
+                playPosture();
+            }}></Camera>
             <div id="boards">
                 <div className="board">
                     <h1>to-do</h1>
