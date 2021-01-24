@@ -12,7 +12,7 @@ function Home() {
     const [choiceLevel, setChoiceLevel] = useState(1);  // lvl 1 = choosing time, lvl 2 = choosing schedule
 
     const context = useContext(UserContext);
-    var sessionTime = 0;
+    let sessionTime = 0;
     const setSessionTime = (hour) => {
         context.setSessionTime(hour*60);
         sessionTime = hour;
@@ -84,7 +84,7 @@ function Home() {
     }
 
     function setSchedule(schedule){
-        var breakTime, workTime;
+        let breakTime, workTime;
         if (schedule === 'pomodoro'){
             breakTime = 300;
             workTime = 1500;
@@ -95,11 +95,11 @@ function Home() {
         }
         //for custom
         else{
-            var parts = schedule.split(" ")
+            let parts = schedule.split(" ")
             breakTime = parseInt(parts[1])*60;//however we track the break converted to seconds
             workTime = parseInt(parts[0])*60//however we track the workTime in seconds
         }
-        var scheduleTimes = {
+        let scheduleTimes = {
             breakSec: breakTime,
             workSec: workTime
         }
@@ -111,7 +111,7 @@ function Home() {
     return (
         <div className="home">
             <Popup contentStyle={{background: 'none', borderStyle: 'none'}} open={openTime} closeOnDocumentClick onClose={closeTimeModal}>
-                    <div className="popup-div">
+                    <div className="popup-div custom-popup">
                         <span>input total session time in minutes:</span>
                         <form>
                         <input type = "number" id="time-input" placeholder="time in minutes..."></input>
@@ -120,7 +120,7 @@ function Home() {
                     </div>
             </Popup>
             <Popup contentStyle={{background: 'none', borderStyle: 'none'}} open={openSchedule} closeOnDocumentClick onClose={closeScheduleModal}>
-                    <div className="popup-div">
+                    <div className="popup-div custom-popup">
                         <span>input interval of work time followed by break time in minutes:</span>
                         <form>
                         <input type = "number" id="work-input" placeholder="work interval..."></input>

@@ -56,3 +56,11 @@ body {
     display: none;
     justify-content: center;
 }
+
+.custom-popup {
+    padding: 4rem;
+}
+
+input {
+    margin: 0 0.5rem;
+}
