@@ -72,3 +72,8 @@ export default class Timer extends Component {
         )
     }
 }
+
+Timer.defaultProps = {
+    onSecondTick: () => {},
+    onFinish: () => {}
+}
