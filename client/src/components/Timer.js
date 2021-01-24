@@ -34,6 +34,7 @@ export default class Timer extends Component {
                 if (minutes === 0) {
                     if(hours === 0){
                         clearInterval(this.myInterval);
+                        this.props.onFinish();
                     }
                     else if(hours > 0){
                         this.setState(({ hours }) => ({
@@ -54,9 +55,7 @@ export default class Timer extends Component {
 
     componentWillUnmount() {
         console.log('unmounting timer');
-        this.context.setOnBreak(o => !o)
         clearInterval(this.myInterval);
-        console.log(this.context.onBreak);
     }
 
     render() {

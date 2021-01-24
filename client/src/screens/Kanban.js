@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import './Kanban.css';
 import '../components/KanbanBoard.css';
 import '../components/Task.css'
@@ -22,6 +23,7 @@ function Kanban({ time }) {
     const [showCamera, setCamera] = useState(false);
     const [calibrating, setCalibrating] = useState(true);
     const context = useContext(UserContext);
+    const history = useHistory();
 
     class Task extends React.Component {
 
@@ -166,14 +168,14 @@ function Kanban({ time }) {
             </Popup>
             <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={context.onBreak} closeOnDocumentClick onClose={context.setOnBreak(false)}>
                 <div id="break" className="popup-div">
-                    <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.breakMin))[0]} minutes={convertTime(context.breakMin)[1]} seconds={convertTime(context.breakMin)[2]} postText="till break over" />
+                    <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.breakMin))[0]} minutes={convertTime(context.breakMin)[1]} seconds={convertTime(context.breakMin)[2]} postText="till break over" onFinish={() => context.setOnBreak(false)}/>
                 </div>
             </Popup>
             <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
                 <div id = "timers">
-                {context.onBreak ? null : <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="till break time" />}
-                <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="hours left" />
+                {context.onBreak ? null : <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="till break time" onFinish={() => context.setOnBreak(true)}/>}
+                <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="hours left" onFinish={() => history.push('/stats')}/>
                 </div>
             </div>
             <div id="kanban-btns">
