@@ -12,6 +12,7 @@ import UserContext from '../userContext';
 import Draggable from 'react-draggable';
 import 'reactjs-popup/dist/index.css';
 import will from '../assets/will.svg';
+import { useContext } from 'react';
 
 function Kanban({ time }) {
 
@@ -20,7 +21,6 @@ function Kanban({ time }) {
     const [progressTasks, setProgress] = useState([]);
     const [doneTasks, setDone] = useState([]);
     const [showCamera, setCamera] = useState(false);
-
     const context = useContext(UserContext);
 
     class Task extends React.Component {
@@ -44,7 +44,7 @@ function Kanban({ time }) {
         }
 
         static contextType = UserContext;
-
+        
         componentWillUnmount() { // debugging
             console.log('unmounting');
         }
@@ -125,9 +125,19 @@ function Kanban({ time }) {
         return taskElements;
     }
 
+    //converts total seesion time in minutes to hours, minutes, seconds 
+    function convertTime(totalSessionTimeMinutes){
+        let hours = Math.floor(totalSessionTimeMinutes/60);
+        let minutes = totalSessionTimeMinutes - (hours*60);
+        let seconds = 60 * (totalSessionTimeMinutes - Math.floor(totalSessionTimeMinutes));
+        console.log(minutes);
+        return [hours, minutes, seconds];
+    }
+
     //popup for drinking water
     const [waterPopupOpen, drinkWater] = useState(false);
     const closeWaterPopup = () => drinkWater(false);
+
     //popup for posture
     const [posturePopupOpen, fixPosture] = useState(false);
     const closePosturePopup = () => fixPosture(false);
@@ -157,13 +167,15 @@ function Kanban({ time }) {
             </Popup>
             <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
-                <Timer font='Alata' fontColor='#9DA7FF' hours={context.sessionTime / 60} minutes={0} seconds={0} postText="hours left" />
+                <div id = "timers">
+                <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="till break time" />
+                <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="hours left" />
+                </div>
             </div>
             <div id="kanban-btns">
                 {showCamera ? <button className = "btn" onClick = {() => setCamera(o => !o)}>close camera</button>:<button className = "btn" onClick = {() => setCamera(o => !o)}>view camera</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
-            {/*<Camera visible={showCamera}></Camera>*/}
             <div id="boards">
                 <div className="board">
                     <h1>to-do</h1>
