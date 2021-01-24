@@ -108,6 +108,8 @@ function Kanban({ time }) {
     const [open, setOpen] = useState(false);
     const closeModal = () => setOpen(false);
 
+    // break popup
+    const [onBreak, setOnBreak] = useState(false);
 
     // add new task (defaults to to-do board)
     function addTask() {
@@ -166,15 +168,24 @@ function Kanban({ time }) {
                     <h2>here's your reminder to drink some water!</h2>
                 </div>
             </Popup>
-            <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={context.onBreak} closeOnDocumentClick onClose={context.setOnBreak(false)}>
+            <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={onBreak} closeOnDocumentClick onClose={() => {
+                context.setOnBreak(false);
+                setOnBreak(false);
+            }}>
                 <div id="break" className="popup-div">
-                    <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.breakMin))[0]} minutes={convertTime(context.breakMin)[1]} seconds={convertTime(context.breakMin)[2]} postText="till break over" onFinish={() => context.setOnBreak(false)}/>
+                    <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.breakMin))[0]} minutes={convertTime(context.breakMin)[1]} seconds={convertTime(context.breakMin)[2]} postText="till break over" onFinish={() => {
+                        context.setOnBreak(false);
+                        setOnBreak(false);
+                    }}/>
                 </div>
             </Popup>
             <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
                 <div id = "timers">
-                {context.onBreak ? null : <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="till break time" onFinish={() => context.setOnBreak(true)}/>}
+                {onBreak ? null : <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="till break time" onFinish={() => {
+                    context.setOnBreak(true);
+                    setOnBreak(true);
+                }}/>}
                 <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="hours left" onFinish={() => history.push('/stats')}/>
                 </div>
             </div>
