@@ -27,7 +27,7 @@ function Kanban() {
 
     class Task extends React.Component {
 
-        bounds = { // need to fix bounds
+        bounds = { 
             toDo: document.body.clientWidth / 3,
             inProgress: (document.body.clientWidth / 3) * 2,
             done: document.body.clientWidth
