@@ -46,7 +46,7 @@ function Kanban({ time }) {
         static contextType = UserContext;
         
         componentWillUnmount() { // debugging
-            console.log('unmounting ' + this.name);
+            console.log('unmounting');
         }
 
         // remove task from board list
@@ -55,7 +55,7 @@ function Kanban({ time }) {
                 case 'to-do': setToDo(toDoTasks.filter(task => task !== this.name)); break;
                 case 'in-progress': setProgress(progressTasks.filter(task => task !== this.name)); break;
                 case 'done': setDone(doneTasks.filter(task => task !== this.name)); break;
-                default: console.log('no status'); break;
+                default: break;
             }
         }
 
@@ -63,35 +63,32 @@ function Kanban({ time }) {
 
             let currentStatus = this.state.status;
 
-            let newX = e.clientX; // new x position (where mouse is)
+            let newX = e.clientX; // new x position
+            console.log(newX);
             // add to new board based on x position
-            this.removeFromList(); // remove from old board
             if (newX < this.bounds.toDo) {
                 if (currentStatus !== 'to-do') {
+                    this.removeFromList(); // remove from old board
                     setToDo(toDoTasks.concat(this.name));
                     this.setState({
                         status: 'to-do'
                     });
-                }else {
-                    setToDo(toDoTasks);
                 }
             } else if (newX < this.bounds.inProgress) {
                 if (currentStatus !== 'in-progress') {
+                    this.removeFromList(); // remove from old board
                     setProgress(progressTasks.concat(this.name));
                     this.setState({
                         status: 'in-progress'
                     });
-                }else {
-                    setProgress(progressTasks);
                 }
             } else if (newX >= this.bounds.inProgress) {
                 if (currentStatus !== 'done') {
+                    this.removeFromList(); // remove from old board
                     setDone(doneTasks.concat(this.name));
                     this.setState({
                         status: 'done'
                     });
-                }else {
-                    setDone(doneTasks);
                 }
             }
         }
@@ -133,7 +130,6 @@ function Kanban({ time }) {
         let hours = Math.floor(totalSessionTimeMinutes/60);
         let minutes = totalSessionTimeMinutes - (hours*60);
         let seconds = 60 * (totalSessionTimeMinutes - Math.floor(totalSessionTimeMinutes));
-        //console.log(minutes);
         return [hours, minutes, seconds];
     }
 
@@ -168,16 +164,21 @@ function Kanban({ time }) {
                     <h2>here's your reminder to drink some water!</h2>
                 </div>
             </Popup>
+            <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={context.onBreak} closeOnDocumentClick onClose={context.setOnBreak(false)}>
+                <div id="break" className="popup-div">
+                    <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.breakMin))[0]} minutes={convertTime(context.breakMin)[1]} seconds={convertTime(context.breakMin)[2]} postText="till break over" />
+                </div>
+            </Popup>
             <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
-                <div id="timers">
-                    <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="'til break time" />
-                    <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="hours left in session" />
+                <div id = "timers">
+                {context.onBreak ? null : <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="till break time" />}
+                <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="hours left" />
                 </div>
             </div>
             <div id="kanban-btns">
                 {showCamera ? <button className = "btn" onClick = {() => setCamera(o => !o)}>close camera</button>:<button className = "btn" onClick = {() => setCamera(o => !o)}>view camera</button>}
-                {calibrating ? <button className="btn">calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>re-calibrate</button>}
+                {calibrating ? <button className="btn">Calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>Re-calibrate</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
             <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)}></Camera>

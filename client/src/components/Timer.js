@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import UserContext from '../userContext';
 
 export default class Timer extends Component {
     constructor(props){
@@ -15,8 +16,9 @@ export default class Timer extends Component {
                 fontSize: this.props.fontSize
             }
         }
-        console.log(this.state.style);
     }
+
+    static contextType = UserContext;
 
     componentDidMount() {
         console.log('mounting timer');
@@ -31,7 +33,7 @@ export default class Timer extends Component {
             if (seconds === 0) {
                 if (minutes === 0) {
                     if(hours === 0){
-                    clearInterval(this.myInterval)
+                        clearInterval(this.myInterval);
                     }
                     else if(hours > 0){
                         this.setState(({ hours }) => ({
@@ -52,7 +54,9 @@ export default class Timer extends Component {
 
     componentWillUnmount() {
         console.log('unmounting timer');
-        clearInterval(this.myInterval)
+        this.context.setOnBreak(o => !o)
+        clearInterval(this.myInterval);
+        console.log(this.context.onBreak);
     }
 
     render() {
