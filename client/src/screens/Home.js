@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import './Home.css';
 import UserContext from '../userContext';
-import blobs from '../assets/blobs.png';
-import title from '../assets/name.png';
+import blobs from '../assets/blobs.svg';
+import title from '../assets/name.svg';
 import { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
 import { useHistory } from 'react-router-dom';
@@ -36,7 +36,7 @@ function Home() {
     function getTimeButtons(){
         const buttonList = [1, 2, 4, 6];
         const buttons = buttonList.map((button) => {
-            return (<button key={button} onClick={() => {setSessionTime(button); setChoiceLevel(2);}}>{button} hours</button>)
+            return (<button className="home-btn" key={button} onClick={() => {setSessionTime(button); setChoiceLevel(2);}}>{button} hours</button>)
         });
         return buttons;
     }
@@ -134,12 +134,12 @@ function Home() {
             <h2 className="subtitle">START WORK SESSION</h2>
             <div id="choice-1" className="button-array">
                 {getTimeButtons()}
-                <button key="custom" onClick={() => setTimeOpen(o => !o)}>custom</button>
+                <button className="home-btn" key="custom" onClick={() => setTimeOpen(o => !o)}>custom</button>
             </div>
             <div id="choice-2" className="button-array">
                 <button className="home-btn" key="restart" onClick={() => setChoiceLevel(1)}>restart</button>
                 {getMethodButtons()}
-                <button key="custom" onClick={() => setScheduleOpen(o => !o)}>custom</button>
+                <button className="home-btn" key="custom" onClick={() => setScheduleOpen(o => !o)}>custom</button>
             </div>
         </div>
     );

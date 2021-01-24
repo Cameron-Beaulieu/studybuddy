@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import './Stats.css';
-import studybuddy from '../assets/name-w-blobs.png';
+import studybuddy from '../assets/name-w-blobs.svg';
 import UserContext from '../userContext';
 import { PieChart } from 'react-minimal-pie-chart';
 

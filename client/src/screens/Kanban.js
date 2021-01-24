@@ -1,14 +1,15 @@
 import './Kanban.css';
 import '../components/KanbanBoard.css';
 import '../components/Task.css'
-import studybuddy from '../assets/name-w-blobs.png';
+import studybuddy from '../assets/name-w-blobs.svg';
+import kevins from '../assets/kevins.svg';
 import Popup from 'reactjs-popup';
 import Timer from '../components/Timer'
 import React, { useState } from 'react';
 import UserContext from '../userContext';
 import Draggable from 'react-draggable';
 import 'reactjs-popup/dist/index.css';
-import will from '../assets/will.png';
+import will from '../assets/will.svg';
 
 function Kanban({ time }) {
 
@@ -116,12 +117,21 @@ function Kanban({ time }) {
         return taskElements;
     }
 
-    //popup for adding tasks
-    const [waterPopupOpen, drinkWater] = useState(true);
+    //popup for drinking water
+    const [waterPopupOpen, drinkWater] = useState(false);
     const closeWaterPopup = () => drinkWater(false);
+    //popup for posture
+    const [posturePopupOpen, fixPosture] = useState(false);
+    const closePosturePopup = () => fixPosture(false);
 
     return (
         <div className="kanban">
+            <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={posturePopupOpen} closeOnDocumentClick onClose={closePosturePopup}>
+                <div id="fix-posture" className="popup-div">
+                    <img id="kevins" src={kevins}></img>
+                    <h2>sit up! your posture is important!</h2>
+                </div>
+            </Popup>
             <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={open} closeOnDocumentClick onClose={closeModal}>
                 <div className="task-popup popup-div">
                     <span>new task:</span>
