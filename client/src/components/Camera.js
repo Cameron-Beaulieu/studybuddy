@@ -80,7 +80,7 @@ class Camera extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.calibrating !== this.props.calibrating) {
+        if (prevProps.calibrating !== this.props.calibrating && this.props.calibrating) {
             this.calibrate();
         }
     }
