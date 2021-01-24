@@ -55,7 +55,7 @@ input {
     margin-top: 0.5rem;
 }
 
-#drink-water {
+#drink-water, #fix-posture {
     padding: 6rem;
 }
 
@@ -75,4 +75,8 @@ input {
 
 #will {
     width: 15%;
+}
+
+#kevins {
+    width: 100%;
 }
