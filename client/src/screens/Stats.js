@@ -33,12 +33,12 @@ function Stats() {
     }
 
     function displayChartInfo() {
-        const ratioProductive = context.productive / (context.productive + context.slack + context.breakMin);
-        const ratioSlack = context.slack / (context.productive + context.slack + context.breakMin);
-        const ratioBreak = context.breakTime / (context.productive + context.slack + context.breakMin);
-        const ratioOver = context.overBreak / (context.productive + context.slack + context.breakMin);
+        const timeOnBreak = Math.floor(context.sessionTime / context.breakMin);
+        const ratioProductive = context.productive / (context.productive + context.slack + timeOnBreak);
+        const ratioSlack = context.slack / (context.productive + context.slack + timeOnBreak);
+        const ratioBreak = timeOnBreak / (context.productive + context.slack + timeOnBreak);
         return (
-            <h2 id="chartInfo">{Math.floor(ratioProductive * context.sessionTimeMinutes)} minutes productive, {Math.floor(ratioSlack * context.sessionTimeMinutes)} minutes unproductive, {Math.floor(ratioBreak * context.sessionTimeMinutes)} minutes on break, {Math.floor(ratioOver * context.sessionTimeMinutes)} minutes of extra break taken</h2>
+            <h2 id="chartInfo">{Math.floor(ratioProductive * context.sessionTime)} minutes productive, {Math.floor(ratioSlack * context.sessionTime)} minutes unproductive, {Math.floor(ratioBreak * context.sessionTime)} minutes on break</h2>
         )
     }
     function displayStats() {
@@ -46,21 +46,21 @@ function Stats() {
             <div id="stats">
                 {displayChartInfo()}
                 <h2 class="stat">{context.sips} drinks of water taken</h2>
-                <h2 class="stat">your posture was bad for {context.goodPostureTime} minutes</h2>
+                <h2 class="stat">your posture was bad for {Math.floor(context.goodPostureTime)} minutes</h2>
             </div>
         )
 
     }
     function generateData(){
-        const ratioProductive = context.productive / (context.productive + context.slack + context.breakMin);
-        const ratioSlack = context.slack / (context.productive + context.slack + context.breakMin);
-        const ratioBreak = context.breakTime / (context.productive + context.slack + context.breakMin);
-        const ratioOver = context.overBreak / (context.productive + context.slack + context.breakMin);
+        console.log(context.sessionTimeMinutes);
+        const timeOnBreak = Math.floor(context.sessionTime / context.breakMin);
+        const ratioProductive = context.productive / (context.productive + context.slack + timeOnBreak);
+        const ratioSlack = context.slack / (context.productive + context.slack + timeOnBreak);
+        const ratioBreak = timeOnBreak / (context.productive + context.slack + timeOnBreak);
         const data = [
-            { title: `productive time: ${Math.floor(ratioProductive * context.sessionTimeMinutes)} minutes`, key: 'productive time', value: context.productive, color: '#00A9B4' },
-            { title: `wasted time: ${Math.floor(ratioSlack * context.sessionTimeMinutes)} minutes`, key: 'wasted time', value: context.slack, color: '#AAFAFF' },
-            { title: `break time: ${Math.floor(ratioBreak * context.sessionTimeMinutes)} minutes`, key: 'break time', value: context.breakTime, color: '#00747F' },
-            { title: `extra break time: ${Math.floor(ratioOver * context.sessionTimeMinutes)} minutes`, key: 'extra break time', value: context.overBreak, color: '#9D669B' }
+            { title: `productive time: ${Math.floor(ratioProductive * context.sessionTime)} minutes`, key: 'productive time', value: context.productive, color: '#00A9B4' },
+            { title: `wasted time: ${Math.floor(ratioSlack * context.sessionTime)} minutes`, key: 'wasted time', value: context.slack, color: '#AAFAFF' },
+            { title: `break time: ${Math.floor(ratioBreak * context.sessionTime)} minutes`, key: 'break time', value: context.breakTime, color: '#00747F' },
         ]
         return data;
     }
