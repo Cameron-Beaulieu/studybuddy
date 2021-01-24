@@ -34,6 +34,8 @@ class Camera extends React.Component {
         this.face = undefined;
         this.facedata = undefined;
         this.badPostureCombo = 0;
+        this.timeSinceLastSip = 0;
+        this.timeSinceLastPostureWarning = 0;
     }
 
     static contextType = UserContext;
@@ -175,7 +177,7 @@ class Camera extends React.Component {
                     this.context.setGoodPostureTime(this.context.goodPostureTime + 0.5/60);
                     this.badPostureCombo = 0;
                 }
-                if (this.badPostureCombo >= 10) {
+                if (this.badPostureCombo >= 10 && new Date().getTime() - this.timeSinceLastPostureWarning > 30000) {
                     this.props.onPostureWarning()
                 }
             }
