@@ -80,7 +80,7 @@ function Home() {
     // create a custom session time
     function chooseCustomTime() {
         const timeInput = document.getElementById('time-input').value;
-        setSessionTime(timeInput);
+        setSessionTime(parseInt(timeInput)/60); setChoiceLevel(2);
     }
 
     function setSchedule(schedule){
@@ -96,8 +96,8 @@ function Home() {
         //for custom
         else{
             var parts = schedule.split(" ")
-            breakTime = parseInt(parts[1]);//however we track the break converted to seconds
-            workTime = parseInt(parts[0])//however we track the workTime in seconds
+            breakTime = parseInt(parts[1])*60;//however we track the break converted to seconds
+            workTime = parseInt(parts[0])*60//however we track the workTime in seconds
         }
         var scheduleTimes = {
             breakSec: breakTime,
@@ -114,7 +114,7 @@ function Home() {
                     <div className="popup-div">
                         <span>input total session time in minutes:</span>
                         <form>
-                        <input id="time-input" placeholder="time in minutes..."></input>
+                        <input type = "number" id="time-input" placeholder="time in minutes..."></input>
                         <button className="btn" onClick={() => { chooseCustomTime(); setTimeOpen(false); }}>done</button>
                         </form>
                     </div>
@@ -123,8 +123,8 @@ function Home() {
                     <div className="popup-div">
                         <span>input interval of work time followed by break time in minutes:</span>
                         <form>
-                        <input id="work-input" placeholder="work interval..."></input>
-                        <input id="break-input" placeholder="break interval..."></input>
+                        <input type = "number" id="work-input" placeholder="work interval..."></input>
+                        <input type = "number" id="break-input" placeholder="break interval..."></input>
                         <button className="btn" onClick={() => { chooseCustomSchedule(); setScheduleOpen(false); }}>done</button>
                         </form>
                     </div>
