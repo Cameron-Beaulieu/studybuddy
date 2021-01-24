@@ -33,7 +33,7 @@ function Stats() {
     }
 
     function displayChartInfo() {
-        const timeOnBreak = Math.floor(context.sessionTime / (context.breakMin + context.workMin));
+        const timeOnBreak = Math.floor((context.sessionTime / (context.breakMin + context.workMin))* context.breakMin);
         const ratioProductive = context.productive / (context.productive + context.slack + timeOnBreak);
         const ratioSlack = context.slack / (context.productive + context.slack + timeOnBreak);
         const ratioBreak = timeOnBreak / (context.productive + context.slack + timeOnBreak);
@@ -53,7 +53,7 @@ function Stats() {
     }
     function generateData(){
         console.log(context.sessionTimeMinutes);
-        const timeOnBreak = Math.floor(context.sessionTime / (context.breakMin+ context.workMin));
+        const timeOnBreak = Math.floor((context.sessionTime / (context.breakMin+ context.workMin))*context.breakMin);
         const ratioProductive = context.productive / (context.productive + context.slack + timeOnBreak);
         const ratioSlack = context.slack / (context.productive + context.slack + timeOnBreak);
         const ratioBreak = timeOnBreak / (context.productive + context.slack + timeOnBreak);
