@@ -146,10 +146,14 @@ class Camera extends React.Component {
             if (!this.calibrated) {
                 this.findMaxFace(data)
             } else {
-                if (processPose.checkFace(data, this.xMaxRightEye,this.yMaxRightEye,this.xMinRightEye,this.yMinRightEye,this.xMaxLeftEye,this.yMaxLeftEye,this.xMinLeftEye,this.yMinLeftEye)) {
-                    this.context.setSlack(this.context.slack + 0.5/60);
-                } else {
-                    this.context.setProductive(this.context.productive + 0.5/60);
+                if (this.facedata) {
+                    if (this.facedata[0]) {
+                        if (processPose.checkFace(data, this.xMaxRightEye,this.yMaxRightEye,this.xMinRightEye,this.yMinRightEye,this.xMaxLeftEye,this.yMaxLeftEye,this.xMinLeftEye,this.yMinLeftEye)) {
+                            this.context.setSlack(this.context.slack + 0.5/60);
+                        } else {
+                            this.context.setProductive(this.context.productive + 0.5/60);
+                        }
+                    }
                 }
             }
         })
@@ -226,25 +230,35 @@ class Camera extends React.Component {
     }
 
     detectSip() {
+        let nonPersonDetected = false
         this.state.detectedObjects.forEach(obj => {
             if (this.facedata) {
-                if ((obj.class === "donut") || (obj.class === "wine glass") || (obj.class === "bottle") || (obj.class === "cup")) {
-                    let y = this.facedata[0].landmarks[3][1]
-                    let x = this.facedata[0].landmarks[3][0]
-                    if ((obj.bbox[0] - 50 < x) && (x < obj.bbox[0] + obj.bbox[2] + 50) && (obj.bbox[1] - 50 < y) && (y < obj.bbox[1] + obj.bbox[3] + 50)) {
-                        if ((!this.sipped && new Date().getTime() - this.sipCooldown > 2000) || (!this.sipCooldown)) {
-                            console.log("sip");
-                            this.sipped = true;
-                            this.context.setSips(this.context.sips + 1);
+                if (this.facedata[0]) {
+                    // if ((obj.class === "donut") || (obj.class === "wine glass") || (obj.class === "bottle") || (obj.class === "cup")) {
+                    if (obj.class !== "person") {
+                        nonPersonDetected = true
+                        let y = this.facedata[0].landmarks[3][1]
+                        let x = this.facedata[0].landmarks[3][0]
+                        if ((obj.bbox[0] - 50 < x) && (x < obj.bbox[0] + obj.bbox[2] + 50) && (obj.bbox[1] - 50 < y) && (y < obj.bbox[1] + obj.bbox[3] + 50)) {
+                            if ((!this.sipped && new Date().getTime() - this.sipCooldown > 2000) || (!this.sipCooldown)) {
+                                console.log("sip");
+                                this.sipped = true;
+                                this.context.setSips(this.context.sips + 1);
+                            }
+                            this.sipCooldown = new Date().getTime()
+                            return
+                        } else if ((new Date().getTime() - this.sipCooldown > 2000) && this.sipped) {
+                            this.sipped = false;
+                            console.log("unsip");
                         }
-                        this.sipCooldown = new Date().getTime()
-                        return
-                    } else {
-                        this.sipped = false;
                     }
                 }
             }
         });
+        if ((!nonPersonDetected && new Date().getTime() - this.sipCooldown > 2000) && this.sipped) {
+            this.sipped = false;
+            console.log("unsip");
+        }
     }
 
     drawSkeleton() {
