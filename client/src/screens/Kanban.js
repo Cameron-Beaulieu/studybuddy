@@ -175,6 +175,7 @@ function Kanban({ time }) {
                 {showCamera ? <button className = "btn" onClick = {() => setCamera(o => !o)}>close camera</button>:<button className = "btn" onClick = {() => setCamera(o => !o)}>view camera</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
+            {/*<Camera visible={showCamera}></Camera>*/}
             <div id="boards">
                 <div className="board">
                     <h1>to-do</h1>
