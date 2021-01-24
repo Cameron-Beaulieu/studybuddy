@@ -26,9 +26,9 @@ function Kanban({ time }) {
     class Task extends React.Component {
 
         bounds = { // need to fix bounds
-            toDo: window.innerWidth / 3 - 100,
-            inProgress: (window.innerWidth / 3) * 2 - 100,
-            done: window.innerWidth
+            toDo: document.body.clientWidth / 3,
+            inProgress: (document.body.clientWidth / 3) * 2,
+            done: document.body.clientWidth
         }
 
         constructor(props) {
@@ -49,44 +49,47 @@ function Kanban({ time }) {
             console.log('unmounting');
         }
 
+        // remove task from board list
         removeFromList() {
             switch (this.state.status) {
                 case 'to-do': setToDo(toDoTasks.filter(task => task !== this.name)); break;
                 case 'in-progress': setProgress(progressTasks.filter(task => task !== this.name)); break;
                 case 'done': setDone(doneTasks.filter(task => task !== this.name)); break;
+                default: break;
             }
-            /*console.log('todo:' + toDoTasks);
-            console.log('in progress: ' + progressTasks);
-            console.log('done: ' + doneTasks);*/
         }
 
-        handleStop = (e, ui) => {
+        handleStop = (e) => {
 
-            let offset = 0; // offsets bc ui.x is based on position relative to start position
-            if (this.state.status === 'in-progress') {
-                offset = this.bounds.toDo;
-            } else if (this.state.status === 'done') {
-                offset = this.bounds.inProgress;
-            }
+            let currentStatus = this.state.status;
 
-            let newX = ui.x + offset; // new x position
-            this.removeFromList(); // remove from old board
+            let newX = e.clientX; // new x position
+            console.log(newX);
             // add to new board based on x position
             if (newX < this.bounds.toDo) {
-                setToDo(toDoTasks.concat(this.name));
-                this.setState({
-                    status: 'to-do'
-                });
+                if (currentStatus !== 'to-do') {
+                    this.removeFromList(); // remove from old board
+                    setToDo(toDoTasks.concat(this.name));
+                    this.setState({
+                        status: 'to-do'
+                    });
+                }
             } else if (newX < this.bounds.inProgress) {
-                setProgress(progressTasks.concat(this.name));
-                this.setState({
-                    status: 'in-progress'
-                });
-            } else {
-                setDone(doneTasks.concat(this.name));
-                this.setState({
-                    status: 'done'
-                });
+                if (currentStatus !== 'in-progress') {
+                    this.removeFromList(); // remove from old board
+                    setProgress(progressTasks.concat(this.name));
+                    this.setState({
+                        status: 'in-progress'
+                    });
+                }
+            } else if (newX >= this.bounds.inProgress) {
+                if (currentStatus !== 'done') {
+                    this.removeFromList(); // remove from old board
+                    setDone(doneTasks.concat(this.name));
+                    this.setState({
+                        status: 'done'
+                    });
+                }
             }
         }
 
@@ -133,7 +136,7 @@ function Kanban({ time }) {
         <div className="kanban">
             <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={posturePopupOpen} closeOnDocumentClick onClose={closePosturePopup}>
                 <div id="fix-posture" className="popup-div">
-                    <img id="kevins" src={kevins}></img>
+                    <img id="kevins" src={kevins} alt="a drawing of someone fixing their posture"></img>
                     <h2>sit up! your posture is important!</h2>
                 </div>
             </Popup>
@@ -148,7 +151,7 @@ function Kanban({ time }) {
             </Popup>
             <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={waterPopupOpen} closeOnDocumentClick onClose={closeWaterPopup}>
                 <div id="drink-water" className="popup-div">
-                    <img id="will" src={will}></img>
+                    <img id="will" src={will} alt="a drawing of a water droplet"></img>
                     <h2>here's your reminder to drink some water!</h2>
                 </div>
             </Popup>
@@ -157,10 +160,10 @@ function Kanban({ time }) {
                 <Timer font='Alata' fontColor='#9DA7FF' hours={context.sessionTime / 60} minutes={0} seconds={0} postText="hours left" />
             </div>
             <div id="kanban-btns">
-                {showCamera ? <button className = "btm" onClick = {() => setCamera(o => !o)}>Close Camera</button>:<button className = "btm" onClick = {() => setCamera(o => !o)}>View Camera</button>}
+                {showCamera ? <button className = "btn" onClick = {() => setCamera(o => !o)}>close camera</button>:<button className = "btn" onClick = {() => setCamera(o => !o)}>view camera</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
-            <Camera visible={showCamera}></Camera>
+            {/*<Camera visible={showCamera}></Camera>*/}
             <div id="boards">
                 <div className="board">
                     <h1>to-do</h1>
