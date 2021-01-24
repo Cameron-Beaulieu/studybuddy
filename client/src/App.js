@@ -6,6 +6,7 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
+import Head from './components/Head';
 import Home from './screens/Home';
 import Kanban from './screens/Kanban';
 import Stats from './screens/Stats';
@@ -50,6 +51,7 @@ function App() {
         setSips: setSips
       }}>
         <div className="App">
+          <Head/>
           <Switch>
             <Route path="/kanban">
               <Kanban></Kanban>
