@@ -14,7 +14,7 @@ import Draggable from 'react-draggable';
 import 'reactjs-popup/dist/index.css';
 import will from '../assets/will.svg';
 
-function Kanban({ time }) {
+function Kanban() {
 
     //task arrays
     const [toDoTasks, setToDo] = useState([]);
@@ -187,16 +187,16 @@ function Kanban({ time }) {
             <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
                 <div id = "timers">
-                {onBreak ? null : <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="till break time" onFinish={() => {
+                {onBreak ? null : <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="'til break time" onFinish={() => {
                     context.setOnBreak(true);
                     setOnBreak(true);
                 }}/>}
-                <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="hours left" onFinish={() => history.push('/stats')}/>
+                <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="left in session" onFinish={() => history.push('/stats')}/>
                 </div>
             </div>
             <div id="kanban-btns">
                 {showCamera ? <button className = "btn" onClick = {() => setCamera(o => !o)}>close camera</button>:<button className = "btn" onClick = {() => setCamera(o => !o)}>view camera</button>}
-                {calibrating ? <button className="btn">Calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>Re-calibrate</button>}
+                {calibrating ? <button className="btn">calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>re-calibrate</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
             <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)}></Camera>
