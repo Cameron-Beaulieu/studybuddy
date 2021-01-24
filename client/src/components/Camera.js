@@ -34,7 +34,7 @@ class Camera extends React.Component {
         this.face = undefined;
         this.facedata = undefined;
         this.badPostureCombo = 0;
-        this.timeSinceLastSip = 0;
+        this.timeSinceLastSip = new Date().getTime();
         this.timeSinceLastPostureWarning = 0;
     }
 
