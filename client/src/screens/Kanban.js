@@ -46,7 +46,7 @@ function Kanban({ time }) {
         static contextType = UserContext;
         
         componentWillUnmount() { // debugging
-            console.log('unmounting');
+            console.log('unmounting ' + this.name);
         }
 
         // remove task from board list
@@ -55,7 +55,7 @@ function Kanban({ time }) {
                 case 'to-do': setToDo(toDoTasks.filter(task => task !== this.name)); break;
                 case 'in-progress': setProgress(progressTasks.filter(task => task !== this.name)); break;
                 case 'done': setDone(doneTasks.filter(task => task !== this.name)); break;
-                default: break;
+                default: console.log('no status'); break;
             }
         }
 
@@ -63,32 +63,35 @@ function Kanban({ time }) {
 
             let currentStatus = this.state.status;
 
-            let newX = e.clientX; // new x position
-            console.log(newX);
+            let newX = e.clientX; // new x position (where mouse is)
             // add to new board based on x position
+            this.removeFromList(); // remove from old board
             if (newX < this.bounds.toDo) {
                 if (currentStatus !== 'to-do') {
-                    this.removeFromList(); // remove from old board
                     setToDo(toDoTasks.concat(this.name));
                     this.setState({
                         status: 'to-do'
                     });
+                }else {
+                    setToDo(toDoTasks);
                 }
             } else if (newX < this.bounds.inProgress) {
                 if (currentStatus !== 'in-progress') {
-                    this.removeFromList(); // remove from old board
                     setProgress(progressTasks.concat(this.name));
                     this.setState({
                         status: 'in-progress'
                     });
+                }else {
+                    setProgress(progressTasks);
                 }
             } else if (newX >= this.bounds.inProgress) {
                 if (currentStatus !== 'done') {
-                    this.removeFromList(); // remove from old board
                     setDone(doneTasks.concat(this.name));
                     this.setState({
                         status: 'done'
                     });
+                }else {
+                    setDone(doneTasks);
                 }
             }
         }
@@ -130,7 +133,7 @@ function Kanban({ time }) {
         let hours = Math.floor(totalSessionTimeMinutes/60);
         let minutes = totalSessionTimeMinutes - (hours*60);
         let seconds = 60 * (totalSessionTimeMinutes - Math.floor(totalSessionTimeMinutes));
-        console.log(minutes);
+        //console.log(minutes);
         return [hours, minutes, seconds];
     }
 
@@ -174,7 +177,7 @@ function Kanban({ time }) {
             </div>
             <div id="kanban-btns">
                 {showCamera ? <button className = "btn" onClick = {() => setCamera(o => !o)}>close camera</button>:<button className = "btn" onClick = {() => setCamera(o => !o)}>view camera</button>}
-                {calibrating ? <button className="btn">Calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>Re-calibrate</button>}
+                {calibrating ? <button className="btn">calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>re-calibrate</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
             <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)}></Camera>
