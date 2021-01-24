@@ -66,15 +66,16 @@ function Kanban({ time }) {
             let currentStatus = this.state.status;
 
             let newX = e.clientX; // new x position
-            console.log(newX);
+            this.removeFromList(); // remove from old board
             // add to new board based on x position
             if (newX < this.bounds.toDo) {
                 if (currentStatus !== 'to-do') {
-                    this.removeFromList(); // remove from old board
                     setToDo(toDoTasks.concat(this.name));
                     this.setState({
                         status: 'to-do'
                     });
+                }else {
+                    setToDo(toDoTasks);
                 }
             } else if (newX < this.bounds.inProgress) {
                 if (currentStatus !== 'in-progress') {
@@ -83,6 +84,8 @@ function Kanban({ time }) {
                     this.setState({
                         status: 'in-progress'
                     });
+                }else {
+                    setProgress(progressTasks);
                 }
             } else if (newX >= this.bounds.inProgress) {
                 if (currentStatus !== 'done') {
@@ -91,6 +94,8 @@ function Kanban({ time }) {
                     this.setState({
                         status: 'done'
                     });
+                }else {
+                    setDone(doneTasks);
                 }
             }
         }
