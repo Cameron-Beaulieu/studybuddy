@@ -48,13 +48,13 @@ class Camera extends React.Component {
             })
             .then((loaded) => {
                 this.model = loaded;
-                setInterval(this.detectObjects.bind(this), 500)
-                setInterval(this.detectSip.bind(this), 500)
+                this.interval1 = setInterval(this.detectObjects.bind(this), 500)
+                this.interval2 = setInterval(this.detectSip.bind(this), 500)
 
                 blazeface.load()
                 .then(loaded => {
                     this.face = loaded;
-                    setInterval(this.detectFace.bind(this), 500);
+                    this.interval3 = setInterval(this.detectFace.bind(this), 500);
 
                     posenet.load({
                         architecture: "MobileNetV1",
@@ -65,7 +65,7 @@ class Camera extends React.Component {
                     })
                     .then(net => {
                         this.net = net;
-                        setInterval(this.detectPose.bind(this), 500);
+                        this.interval4 = setInterval(this.detectPose.bind(this), 500);
                         this.calibrate();
                     })
                 })
@@ -302,6 +302,13 @@ class Camera extends React.Component {
 
     videoError() {
         console.log("Camera permissions are needed for this app to work");
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval1);
+        clearInterval(this.interval2);
+        clearInterval(this.interval3);
+        clearInterval(this.interval4);
     }
 
     render() {
