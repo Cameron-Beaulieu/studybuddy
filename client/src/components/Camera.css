@@ -10,10 +10,8 @@
 }
 
 .camView {
-  position: relative;
-  float: left;
-  width: calc(100% - 20px);
-  margin: 10px;
+  margin: auto;
+  display: inline-block;
   cursor: pointer;
 }
 

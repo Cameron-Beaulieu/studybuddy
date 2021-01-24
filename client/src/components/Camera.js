@@ -268,7 +268,7 @@ class Camera extends React.Component {
 
     render() {
         return (
-            <div ref={this.divRef} className="camView">
+            <div ref={this.divRef} className="camView" style={{visibility: this.props.visible ? "visible" : "hidden", position: this.props.visible ? "relative" : "absolute"}}>
                 {
                     this.state.detectedObjects.map((prediction, index) => (
                         <>

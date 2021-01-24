@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import './Kanban.css';
 import '../components/KanbanBoard.css';
 import '../components/Task.css'
@@ -19,6 +20,8 @@ function Kanban({ time }) {
     const [progressTasks, setProgress] = useState([]);
     const [doneTasks, setDone] = useState([]);
     const [showCamera, setCamera] = useState(false);
+
+    const context = useContext(UserContext);
 
     class Task extends React.Component {
 
@@ -151,13 +154,13 @@ function Kanban({ time }) {
             </Popup>
             <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
-                <Timer font='Alata' fontColor='#9DA7FF' hours={time} minutes={0} seconds={0} postText="hours left" />
+                <Timer font='Alata' fontColor='#9DA7FF' hours={context.sessionTime / 60} minutes={0} seconds={0} postText="hours left" />
             </div>
             <div id="kanban-btns">
-                {showCamera ? <button className = "btm" conClick = {() => setCamera(o => !o)}>Close Camera</button>:<button className = "btm" conClick = {() => setCamera(o => !o)}>View Camera</button>}
+                {showCamera ? <button className = "btm" onClick = {() => setCamera(o => !o)}>Close Camera</button>:<button className = "btm" onClick = {() => setCamera(o => !o)}>View Camera</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
-            <Camera></Camera>
+            <Camera visible={showCamera}></Camera>
             <div id="boards">
                 <div className="board">
                     <h1>to-do</h1>
