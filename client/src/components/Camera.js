@@ -79,8 +79,31 @@ class Camera extends React.Component {
         })
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.calibrating !== this.props.calibrating) {
+            this.calibrate();
+        }
+    }
+
     calibrate() {
         this.calibrated = false;
+        this.xMinLeftEye = undefined;
+        this.xMaxLeftEye = undefined;
+        this.yMinLeftEye = undefined;
+        this.yMaxLeftEye = undefined;
+        this.xMinRightEye = undefined;
+        this.xMaxRightEye = undefined;
+        this.yMinRightEye = undefined;
+        this.yMaxRightEye = undefined;
+        this.xMinLeftShoulder = undefined;
+        this.xMaxLeftShoulder = undefined;
+        this.yMinLeftShoulder = undefined;
+        this.yMaxLeftShoulder = undefined;
+        this.xMinRightShoulder = undefined;
+        this.xMaxRightShoulder = undefined;
+        this.yMinRightShoulder = undefined;
+        this.yMaxRightShoulder = undefined;
+        this.setState({ calibrationBoxes: [] })
         console.log("Starting calibration")
         setTimeout(() => {
             this.calibrated = true
@@ -110,6 +133,7 @@ class Camera extends React.Component {
                 height: this.yMaxRightShoulder - this.yMinRightShoulder + this.shoulderCalibrationPadding * 2
             })
             console.log("Calibration complete")
+            this.props.onCalibrate();
             this.setState({ calibrationBoxes: boxes });
         }, 10000)
     }

@@ -20,6 +20,7 @@ function Kanban({ time }) {
     const [progressTasks, setProgress] = useState([]);
     const [doneTasks, setDone] = useState([]);
     const [showCamera, setCamera] = useState(false);
+    const [calibrating, setCalibrating] = useState(true);
     const context = useContext(UserContext);
 
     class Task extends React.Component {
@@ -173,9 +174,10 @@ function Kanban({ time }) {
             </div>
             <div id="kanban-btns">
                 {showCamera ? <button className = "btn" onClick = {() => setCamera(o => !o)}>close camera</button>:<button className = "btn" onClick = {() => setCamera(o => !o)}>view camera</button>}
+                {calibrating ? <button className="btn">Calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>Re-calibrate</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
-            {/*<Camera visible={showCamera}></Camera>*/}
+            <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)}></Camera>
             <div id="boards">
                 <div className="board">
                     <h1>to-do</h1>
