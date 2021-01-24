@@ -4,7 +4,8 @@ import '../components/Task.css'
 import studybuddy from '../assets/name-w-blobs.svg';
 import kevins from '../assets/kevins.svg';
 import Popup from 'reactjs-popup';
-import Timer from '../components/Timer'
+import Timer from '../components/Timer';
+import Camera from '../components/Camera';
 import React, { useState } from 'react';
 import UserContext from '../userContext';
 import Draggable from 'react-draggable';
@@ -17,6 +18,7 @@ function Kanban({ time }) {
     const [toDoTasks, setToDo] = useState([]);
     const [progressTasks, setProgress] = useState([]);
     const [doneTasks, setDone] = useState([]);
+    const [showCamera, setCamera] = useState(false);
 
     class Task extends React.Component {
 
@@ -152,9 +154,10 @@ function Kanban({ time }) {
                 <Timer font='Alata' fontColor='#9DA7FF' hours={time} minutes={0} seconds={0} postText="hours left" />
             </div>
             <div id="kanban-btns">
-                <button className="btn">view camera</button>
+                {showCamera ? <button className = "btm" conClick = {() => setCamera(o => !o)}>Close Camera</button>:<button className = "btm" conClick = {() => setCamera(o => !o)}>View Camera</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
+            <Camera></Camera>
             <div id="boards">
                 <div className="board">
                     <h1>to-do</h1>
