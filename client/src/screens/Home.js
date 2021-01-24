@@ -5,16 +5,16 @@ import blobs from '../assets/blobs.png';
 import title from '../assets/name.png';
 import { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
+import { useHistory } from 'react-router-dom';
 
 function Home() {
-
+    const history = useHistory();
     const [choiceLevel, setChoiceLevel] = useState(1);  // lvl 1 = choosing time, lvl 2 = choosing schedule
-    const [schedule, setSchedule] = useState(''); // schedule choice
 
     const context = useContext(UserContext);
     var sessionTime = 0;
     const setSessionTime = (hour) => {
-        context.setSessionTimeMinutes(hour*60);
+        context.setSessionTime(hour*60);
         sessionTime = hour;
     }
 
@@ -83,7 +83,7 @@ function Home() {
         setSessionTime(timeInput);
     }
 
-    function handleSchedule(){
+    function setSchedule(schedule){
         var breakTime, workTime;
         if (schedule === 'pomodoro'){
             breakTime = 300;
@@ -105,7 +105,7 @@ function Home() {
         }
         context.setBreakMin(breakTime / 60);
         context.setWorkMin(workTime / 60);
-        return scheduleTimes;
+        history.push("/kanban");
     }
 
     return (
