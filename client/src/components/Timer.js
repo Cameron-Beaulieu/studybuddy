@@ -61,8 +61,8 @@ export default class Timer extends Component {
         return (
             <div>
                 { hours === 0 && minutes === 0 && seconds === 0
-                    ? <h1>Time Up</h1> //adjust this to what you want to happen when the timer is up
-                    : <h1 style={{ marginBottom: 0, fontSize: style.fontSize, fontFamily: style.font, color: style.fontColor, letterSpacing: 0}}>{preText} {hours}:{minutes < 10 ? `0${minutes}` : minutes}:{seconds < 10 ? `0${seconds}` : seconds} {postText}</h1>
+                    ? <h1 style={{margin: '0 1rem 0 0', fontSize: style.fontSize, fontFamily: style.font, color: style.fontColor, letterSpacing: 0}}>session ended</h1> //adjust this to what you want to happen when the timer is up
+                    : <h1 style={{margin: '0 1rem 0 0', fontSize: style.fontSize, fontFamily: style.font, color: style.fontColor, letterSpacing: 0}}>{preText} {hours}:{minutes < 10 ? `0${minutes}` : minutes}:{seconds < 10 ? `0${seconds}` : seconds} {postText}</h1>
                 }
             </div>
         )

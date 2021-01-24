@@ -167,9 +167,9 @@ function Kanban({ time }) {
             </Popup>
             <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
-                <div id = "timers">
-                <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="till break time" />
-                <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="hours left" />
+                <div id="timers">
+                    <Timer fontSize = {32} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.workMin))[0]} minutes={(convertTime(context.workMin))[1]} seconds={(convertTime(context.workMin))[0]} postText="'til break time" />
+                    <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.sessionTime))[0]} minutes={convertTime(context.sessionTime)[1]} seconds={convertTime(context.sessionTime)[2]} postText="hours left in session" />
                 </div>
             </div>
             <div id="kanban-btns">
