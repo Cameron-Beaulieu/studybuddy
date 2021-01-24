@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import './Stats.css';
 import studybuddy from '../assets/name-w-blobs.svg';
 import UserContext from '../userContext';
@@ -6,6 +7,7 @@ import { PieChart } from 'react-minimal-pie-chart';
 
 function Stats() {
     const context = useContext(UserContext);
+    const history = useHistory();
 
     function displayPieChart() {
 
@@ -66,7 +68,7 @@ function Stats() {
         <div id="screen">
              <div className="container">
                 <img id="logo" src={studybuddy} alt="studybuddy's logo"></img>
-                <button id="newSession" className="stats-btn">start new session</button>
+                <button id="newSession" className="stats-btn" onClick={() => history.push('/')}>start new session</button>
             </div>
             <div id="innerSection">
                 {displayTitle()}
