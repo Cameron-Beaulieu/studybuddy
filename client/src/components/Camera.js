@@ -178,7 +178,8 @@ class Camera extends React.Component {
                     this.badPostureCombo = 0;
                 }
                 if (this.badPostureCombo >= 10 && new Date().getTime() - this.timeSinceLastPostureWarning > 30000) {
-                    this.props.onPostureWarning()
+                    this.props.onPostureWarning();
+                    this.timeSinceLastPostureWarning = new Date().getTime();
                 }
             }
         })
