@@ -170,7 +170,7 @@ function Kanban() {
                     <h2>here's your reminder to drink some water!</h2>
                 </div>
             </Popup>
-            <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={onBreak} closeOnDocumentClick onClose={() => {
+            <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={onBreak} onClose={() => {
                 context.setOnBreak(false);
                 setOnBreak(false);
             }}>
