@@ -198,7 +198,7 @@ function Kanban() {
                 {calibrating ? <button className="btn">calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>re-calibrate</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
-            <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)}></Camera>
+            <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)} onSipWarning={() => drinkWater(true)} onPostureWarning={() => fixPosture(true)}></Camera>
             <div id="boards">
                 <div className="board">
                     <h1>to-do</h1>

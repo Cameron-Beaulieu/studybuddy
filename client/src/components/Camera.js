@@ -33,6 +33,7 @@ class Camera extends React.Component {
         this.pose = undefined;
         this.face = undefined;
         this.facedata = undefined;
+        this.badPostureCombo = 0;
     }
 
     static contextType = UserContext;
@@ -169,8 +170,13 @@ class Camera extends React.Component {
             } else if (!this.context.onBreak) {
                 if (processPose.checkShoulders(pose, this.xMaxRightShoulder,this.yMaxRightShoulder,this.xMinRightShoulder,this.yMinRightShoulder,this.xMaxLeftShoulder,this.yMaxLeftShoulder,this.xMinLeftShoulder,this.yMinLeftShoulder)) {
                     this.context.setBadPostureTime(this.context.badPostureTime + 0.5/60);
+                    this.badPostureCombo += 0.5;
                 } else {
                     this.context.setGoodPostureTime(this.context.goodPostureTime + 0.5/60);
+                    this.badPostureCombo = 0;
+                }
+                if (this.badPostureCombo >= 5) {
+                    this.props.onPostureWarning()
                 }
             }
         })
@@ -244,6 +250,7 @@ class Camera extends React.Component {
                                 console.log("sip");
                                 this.sipped = true;
                                 this.context.setSips(this.context.sips + 1);
+                                this.timeSinceLastSip = new Date().getTime();
                             }
                             this.sipCooldown = new Date().getTime()
                             return
@@ -251,6 +258,9 @@ class Camera extends React.Component {
                             this.sipped = false;
                             console.log("unsip");
                         }
+                    }
+                    if (new Date().getTime() - this.timeSinceLastSip > 900000) {
+                        this.props.onSipWarning()
                     }
                 }
             }
