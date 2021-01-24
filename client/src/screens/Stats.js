@@ -31,10 +31,10 @@ function Stats() {
     }
 
     function displayChartInfo() {
-        const ratioProductive = context.productive / (context.productive + context.slack + context.breakTime + context.overBreak);
-        const ratioSlack = context.slack / (context.productive + context.slack + context.breakTime + context.overBreak);
-        const ratioBreak = context.breakTime / (context.productive + context.slack + context.breakTime + context.overBreak);
-        const ratioOver = context.overBreak / (context.productive + context.slack + context.breakTime + context.overBreak);
+        const ratioProductive = context.productive / (context.productive + context.slack + context.breakMin);
+        const ratioSlack = context.slack / (context.productive + context.slack + context.breakMin);
+        const ratioBreak = context.breakTime / (context.productive + context.slack + context.breakMin);
+        const ratioOver = context.overBreak / (context.productive + context.slack + context.breakMin);
         return (
             <h2 id="chartInfo">{Math.floor(ratioProductive * context.sessionTimeMinutes)} minutes productive, {Math.floor(ratioSlack * context.sessionTimeMinutes)} minutes unproductive, {Math.floor(ratioBreak * context.sessionTimeMinutes)} minutes on break, {Math.floor(ratioOver * context.sessionTimeMinutes)} minutes of extra break taken</h2>
         )
@@ -50,10 +50,10 @@ function Stats() {
 
     }
     function generateData(){
-        const ratioProductive = context.productive / (context.productive + context.slack + context.breakTime + context.overBreak);
-        const ratioSlack = context.slack / (context.productive + context.slack + context.breakTime + context.overBreak);
-        const ratioBreak = context.breakTime / (context.productive + context.slack + context.breakTime + context.overBreak);
-        const ratioOver = context.overBreak / (context.productive + context.slack + context.breakTime + context.overBreak);
+        const ratioProductive = context.productive / (context.productive + context.slack + context.breakMin);
+        const ratioSlack = context.slack / (context.productive + context.slack + context.breakMin);
+        const ratioBreak = context.breakTime / (context.productive + context.slack + context.breakMin);
+        const ratioOver = context.overBreak / (context.productive + context.slack + context.breakMin);
         const data = [
             { title: `productive time: ${Math.floor(ratioProductive * context.sessionTimeMinutes)} minutes`, key: 'productive time', value: context.productive, color: '#00A9B4' },
             { title: `wasted time: ${Math.floor(ratioSlack * context.sessionTimeMinutes)} minutes`, key: 'wasted time', value: context.slack, color: '#AAFAFF' },
