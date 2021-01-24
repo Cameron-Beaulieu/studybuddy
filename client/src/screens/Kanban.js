@@ -215,11 +215,11 @@ function Kanban() {
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
             <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)} onSipWarning={waterPopupOpen ? () => {} : () => {
-                drinkWater(true)
                 playWater();
+                drinkWater(true)
             }} onPostureWarning={posturePopupOpen ? () => {} : () => {
-                fixPosture(true);
                 playPosture();
+                fixPosture(true);
             }}></Camera>
             <div id="boards">
                 <div className="board">
