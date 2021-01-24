@@ -147,6 +147,16 @@ function Kanban() {
     const [posturePopupOpen, fixPosture] = useState(false);
     const closePosturePopup = () => fixPosture(false);
 
+    // break suggestions
+    const suggestions = ['go for a walk.'] //, 'do some jumping jacks.', 'talk to the people you live with.', 'stretch.', 'go talk to someone.', 'fill up your water.', 'go to the washroom.', 'get some fresh air'];
+
+    function getRandomSuggestion(){
+        let random = Math.floor(Math.random() * suggestions.length);
+        return suggestions[random];
+    }
+
+    let randomSuggestion = getRandomSuggestion();
+
     return (
         <div className="kanban">
             <Popup contentStyle={{ background: 'none', borderStyle: 'none' }} open={posturePopupOpen} closeOnDocumentClick onClose={closePosturePopup}>
@@ -175,12 +185,13 @@ function Kanban() {
                 setOnBreak(false);
             }}>
                 <div id="break" className="popup-div">
-                    <Timer fontSize = {16} font='Alata' fontColor='#9DA7FF' hours={(convertTime(context.breakMin))[0]} minutes={convertTime(context.breakMin)[1]} seconds={convertTime(context.breakMin)[2]} postText="till break over" onFinish={() => {
+                    <Timer fontSize = {16} font='Alata' fontColor='#FFFFFF' hours={(convertTime(context.breakMin))[0]} minutes={convertTime(context.breakMin)[1]} seconds={convertTime(context.breakMin)[2]} postText="'til break is over" onFinish={() => {
                         context.setOnBreak(false);
                         setOnBreak(false);
                     }} onSecondTick={() => {
                         context.setTimeOnBreak(context.timeOnBreak + 1/60);
                     }}/>
+                    <div id="suggestion">break time suggestion: {randomSuggestion}</div>
                 </div>
             </Popup>
             <div className="container">
@@ -198,7 +209,7 @@ function Kanban() {
                 {calibrating ? <button className="btn">calibrating...</button> : <button className="btn" onClick={() => setCalibrating(true)}>re-calibrate</button>}
                 <button className="btn" onClick={() => setOpen(o => !o)}>add task</button>
             </div>
-            <Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)} onSipWarning={() => drinkWater(true)} onPostureWarning={() => fixPosture(true)}></Camera>
+            {/*<Camera visible={showCamera} calibrating={calibrating} onCalibrate={() => setCalibrating(false)}></Camera>*/}
             <div id="boards">
                 <div className="board">
                     <h1>to-do</h1>
