@@ -1,3 +1,5 @@
+![studybuddy's banner](https://github.com/Cameron-Beaulieu/studybuddy/blob/main/screenshots/banner.jpg)
+
 # studybuddy
 
 The remote student's best friend. Submitted to QHacks 2021.
@@ -13,6 +15,7 @@ The remote student's best friend. Submitted to QHacks 2021.
 - kanban boards with draggable tasks
 - toggleable sound effects
 - hydration tracking and reminders
+- statistics for each session
 
 ## tools and technologies
 - Figma
@@ -24,3 +27,8 @@ The remote student's best friend. Submitted to QHacks 2021.
 - [Cameron Beaulieu](https://github.com/Cameron-Beaulieu)
 - [Isabella Enriquez](https://github.com/isabellaenriquez)
 - [Marc Kevin Quijalvo](https://github.com/mkevinq)
+
+
+## preview
+![mockups of studybuddy](https://github.com/Cameron-Beaulieu/studybuddy/blob/main/screenshots/mockups.png)
+![studybuddy's landing page](https://github.com/Cameron-Beaulieu/studybuddy/blob/main/screenshots/landing.png)
